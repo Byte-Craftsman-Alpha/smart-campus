@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+smart_campus.db
+smart_campus.db-wal
+smart_campus.db-shm
+.pytest_cache/
+.DS_Store
+.streamlit/secrets.toml

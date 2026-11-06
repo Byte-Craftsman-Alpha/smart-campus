@@ -1,0 +1,958 @@
+{
+  "meta": {
+    "name": "DDUGU IET + Deeksha Bhawan room registry (seed data 1.0)",
+    "source_of_truth": "Building blueprint on page 2 of BUILD_WITH_AI_DevOps_Problem_Statement.pdf",
+    "reconciliation_rule": "Blueprint = source of truth for room IDENTITY and geometry. Statement = source of truth for stated capacities. Anything absent from both is CONFIGURABLE with a documented default.",
+    "buildings": {
+      "IET": {
+        "name": "Institute of Engineering and Technology",
+        "floors": [
+          "GF",
+          "FF",
+          "SF"
+        ],
+        "stairs": [
+          "IET-STAIR-C"
+        ],
+        "lift": false,
+        "entry": "IET-ENTRY-GF-CENTRE"
+      },
+      "DB": {
+        "name": "Deeksha Bhawan",
+        "floors": [
+          "GF",
+          "FF"
+        ],
+        "stairs": [
+          "DB-STAIR-GF",
+          "DB-STAIR-FF"
+        ],
+        "lift": false,
+        "entry": "DB-ENTRY-GF-SOUTH"
+      }
+    },
+    "inter_building": {
+      "IET<->DB": {
+        "distance_m": 100,
+        "walk_seconds_straight": 83,
+        "effort_seconds": {
+          "GF-GF": 240,
+          "GF-FF": 290,
+          "FF-GF": 290,
+          "FF-FF": 340,
+          "SF-GF": 360,
+          "SF-FF": 410
+        },
+        "min_turnaround_minutes": 10,
+        "rule": "The auto-scheduler may never place two consecutive academic activities for the same section in different buildings with a gap shorter than 10 minutes."
+      }
+    }
+  },
+  "rooms": [
+    {
+      "code": "LIB",
+      "building": "IET",
+      "floor": "GF",
+      "label": "Library",
+      "rtype": "LIBRARY",
+      "capacity": 180,
+      "exam_capacity": 90,
+      "bookable": true,
+      "permitted_uses": [
+        "EXAM",
+        "ORIENTATION",
+        "EVENT",
+        "SEMINAR"
+      ],
+      "features": [
+        "desks",
+        "reading_hall",
+        "power"
+      ],
+      "zone": "IET-GF-WEST",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Dual-use: reading hall + examination venue. Bookable only outside library hours or by Director approval."
+    },
+    {
+      "code": "TO",
+      "building": "IET",
+      "floor": "GF",
+      "label": "Teachers' Office / Faculty Cabins",
+      "rtype": "OFFICE",
+      "capacity": 0,
+      "exam_capacity": 0,
+      "bookable": false,
+      "permitted_uses": [],
+      "features": [],
+      "zone": "IET-GF-WEST",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Not bookable. Anchor location for faculty identity and approval routing."
+    },
+    {
+      "code": "DO",
+      "building": "IET",
+      "floor": "GF",
+      "label": "Director's Office",
+      "rtype": "OFFICE",
+      "capacity": 0,
+      "exam_capacity": 0,
+      "bookable": false,
+      "permitted_uses": [],
+      "features": [],
+      "zone": "IET-GF-EAST",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Administrator role anchor; not bookable."
+    },
+    {
+      "code": "PC",
+      "building": "IET",
+      "floor": "GF",
+      "label": "Placement Cell",
+      "rtype": "OFFICE",
+      "capacity": 0,
+      "exam_capacity": 0,
+      "bookable": false,
+      "permitted_uses": [
+        "INTERVIEW"
+      ],
+      "features": [],
+      "zone": "IET-GF-EAST",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Hosts interviews; modelled as office, bookable by admin only (extension, not required by the statement)."
+    },
+    {
+      "code": "IET22",
+      "building": "IET",
+      "floor": "FF",
+      "label": "Room IET22",
+      "rtype": "LAB",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "PRACTICAL",
+        "CLASS",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "lab_benches",
+        "power",
+        "projector"
+      ],
+      "zone": "IET-FF-NORTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "lab_branch": "CSE",
+      "unconfirmed": true,
+      "notes": "Blueprint draws a plain room; the statement calls the four first-floor north rooms the CSE/ME/ECE/IT laboratories. Modelled as LAB (switch room_type to CLASS in one config row if organisers clarify)."
+    },
+    {
+      "code": "IET16",
+      "building": "IET",
+      "floor": "FF",
+      "label": "Room IET16",
+      "rtype": "LAB",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "PRACTICAL",
+        "CLASS",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "lab_benches",
+        "power",
+        "projector"
+      ],
+      "zone": "IET-FF-NORTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "lab_branch": "ME",
+      "unconfirmed": true,
+      "notes": "Blueprint draws a plain room; the statement calls the four first-floor north rooms the CSE/ME/ECE/IT laboratories. Modelled as LAB (switch room_type to CLASS in one config row if organisers clarify)."
+    },
+    {
+      "code": "IET14",
+      "building": "IET",
+      "floor": "FF",
+      "label": "Room IET14",
+      "rtype": "LAB",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "PRACTICAL",
+        "CLASS",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "lab_benches",
+        "power",
+        "projector"
+      ],
+      "zone": "IET-FF-NORTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "lab_branch": "ECE",
+      "unconfirmed": true,
+      "notes": "Blueprint draws a plain room; the statement calls the four first-floor north rooms the CSE/ME/ECE/IT laboratories. Modelled as LAB (switch room_type to CLASS in one config row if organisers clarify)."
+    },
+    {
+      "code": "IET15",
+      "building": "IET",
+      "floor": "FF",
+      "label": "Room IET15",
+      "rtype": "LAB",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "PRACTICAL",
+        "CLASS",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "lab_benches",
+        "power",
+        "projector"
+      ],
+      "zone": "IET-FF-NORTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "lab_branch": "IT",
+      "unconfirmed": true,
+      "notes": "Blueprint draws a plain room; the statement calls the four first-floor north rooms the CSE/ME/ECE/IT laboratories. Modelled as LAB (switch room_type to CLASS in one config row if organisers clarify)."
+    },
+    {
+      "code": "IET20",
+      "building": "IET",
+      "floor": "FF",
+      "label": "Room IET20",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-FF-SOUTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity (stated)."
+    },
+    {
+      "code": "IET19",
+      "building": "IET",
+      "floor": "FF",
+      "label": "Room IET19",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-FF-SOUTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity (stated)."
+    },
+    {
+      "code": "IET18",
+      "building": "IET",
+      "floor": "FF",
+      "label": "Room IET18",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-FF-SOUTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity (stated)."
+    },
+    {
+      "code": "IET17",
+      "building": "IET",
+      "floor": "FF",
+      "label": "Room IET17",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-FF-SOUTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity (stated)."
+    },
+    {
+      "code": "IET32",
+      "building": "IET",
+      "floor": "SF",
+      "label": "Seminar Hall (IET32)",
+      "rtype": "SEMINAR",
+      "capacity": 200,
+      "exam_capacity": 100,
+      "bookable": true,
+      "permitted_uses": [
+        "SEMINAR",
+        "EVENT",
+        "EXAM",
+        "WORKSHOP",
+        "ORIENTATION"
+      ],
+      "features": [
+        "pa_system",
+        "projector",
+        "stage",
+        "podium"
+      ],
+      "zone": "IET-SF-WEST",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Largest IET venue; primary overflow and examination hall. On the 2nd floor with no lift."
+    },
+    {
+      "code": "IET24",
+      "building": "IET",
+      "floor": "SF",
+      "label": "Room IET24",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-SF-NORTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity."
+    },
+    {
+      "code": "IET25",
+      "building": "IET",
+      "floor": "SF",
+      "label": "Room IET25",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-SF-NORTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity."
+    },
+    {
+      "code": "IET30",
+      "building": "IET",
+      "floor": "SF",
+      "label": "Room IET30",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-SF-SOUTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity."
+    },
+    {
+      "code": "IET29",
+      "building": "IET",
+      "floor": "SF",
+      "label": "Room IET29",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-SF-SOUTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity."
+    },
+    {
+      "code": "IET28",
+      "building": "IET",
+      "floor": "SF",
+      "label": "Room IET28",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-SF-SOUTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Standard classroom, ~75 capacity."
+    },
+    {
+      "code": "IET23",
+      "building": "IET",
+      "floor": "SF",
+      "label": "Room IET23",
+      "rtype": "CLASS",
+      "capacity": 75,
+      "exam_capacity": 37,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT"
+      ],
+      "features": [
+        "projector",
+        "whiteboard"
+      ],
+      "zone": "IET-SF-SOUTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": true,
+      "notes": "Drawn on the blueprint; the statement lists only IET24/25/28/29/30. Kept bookable and flagged unconfirmed."
+    },
+    {
+      "code": "IET-SF-STORE",
+      "building": "IET",
+      "floor": "SF",
+      "label": "Unlabelled room beside stairwell",
+      "rtype": "SERVICE",
+      "capacity": 0,
+      "exam_capacity": 0,
+      "bookable": false,
+      "permitted_uses": [],
+      "features": [],
+      "zone": "IET-SF-NORTH",
+      "near_stairs": "IET-STAIR-C",
+      "accessibility": "stairs_only",
+      "unconfirmed": true,
+      "notes": "Narrow unlabelled space between the stairs and IET24. Non-bookable service room."
+    },
+    {
+      "code": "LH01",
+      "building": "DB",
+      "floor": "GF",
+      "label": "LH01 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 80,
+      "exam_capacity": 40,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-GF",
+      "near_stairs": "DB-STAIR-GF",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Capacity is absent from the source data. Value inferred from plan geometry (long open-plan room vs compact room) and is CONFIGURABLE."
+    },
+    {
+      "code": "LH02",
+      "building": "DB",
+      "floor": "GF",
+      "label": "LH02 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 80,
+      "exam_capacity": 40,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-GF",
+      "near_stairs": "DB-STAIR-GF",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Capacity is absent from the source data. Value inferred from plan geometry (long open-plan room vs compact room) and is CONFIGURABLE."
+    },
+    {
+      "code": "LH03",
+      "building": "DB",
+      "floor": "GF",
+      "label": "LH03 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 45,
+      "exam_capacity": 22,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-GF",
+      "near_stairs": "DB-STAIR-GF",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Capacity is absent from the source data. Value inferred from plan geometry (long open-plan room vs compact room) and is CONFIGURABLE."
+    },
+    {
+      "code": "LH04",
+      "building": "DB",
+      "floor": "GF",
+      "label": "LH04 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 45,
+      "exam_capacity": 22,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-GF",
+      "near_stairs": "DB-STAIR-GF",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Capacity is absent from the source data. Value inferred from plan geometry (long open-plan room vs compact room) and is CONFIGURABLE."
+    },
+    {
+      "code": "LH05",
+      "building": "DB",
+      "floor": "GF",
+      "label": "LH05 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 45,
+      "exam_capacity": 22,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-GF",
+      "near_stairs": "DB-STAIR-GF",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Capacity is absent from the source data. Value inferred from plan geometry (long open-plan room vs compact room) and is CONFIGURABLE."
+    },
+    {
+      "code": "LH06",
+      "building": "DB",
+      "floor": "GF",
+      "label": "LH06 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 55,
+      "exam_capacity": 27,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-GF",
+      "near_stairs": "DB-STAIR-GF",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Capacity is absent from the source data. Value inferred from plan geometry (long open-plan room vs compact room) and is CONFIGURABLE."
+    },
+    {
+      "code": "LH07",
+      "building": "DB",
+      "floor": "GF",
+      "label": "LH07 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 55,
+      "exam_capacity": 27,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-GF",
+      "near_stairs": "DB-STAIR-GF",
+      "accessibility": "step_free",
+      "unconfirmed": false,
+      "notes": "Capacity is absent from the source data. Value inferred from plan geometry (long open-plan room vs compact room) and is CONFIGURABLE."
+    },
+    {
+      "code": "LH08",
+      "building": "DB",
+      "floor": "FF",
+      "label": "LH08 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 80,
+      "exam_capacity": 40,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-FF",
+      "near_stairs": "DB-STAIR-FF",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Capacity absent from source data; inferred from plan geometry and CONFIGURABLE."
+    },
+    {
+      "code": "LH09",
+      "building": "DB",
+      "floor": "FF",
+      "label": "LH09 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 80,
+      "exam_capacity": 40,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-FF",
+      "near_stairs": "DB-STAIR-FF",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Capacity absent from source data; inferred from plan geometry and CONFIGURABLE."
+    },
+    {
+      "code": "LH10",
+      "building": "DB",
+      "floor": "FF",
+      "label": "LH10 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 45,
+      "exam_capacity": 22,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-FF",
+      "near_stairs": "DB-STAIR-FF",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Capacity absent from source data; inferred from plan geometry and CONFIGURABLE."
+    },
+    {
+      "code": "LH11",
+      "building": "DB",
+      "floor": "FF",
+      "label": "LH11 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 45,
+      "exam_capacity": 22,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-FF",
+      "near_stairs": "DB-STAIR-FF",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Capacity absent from source data; inferred from plan geometry and CONFIGURABLE."
+    },
+    {
+      "code": "LH12",
+      "building": "DB",
+      "floor": "FF",
+      "label": "LH12 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 45,
+      "exam_capacity": 22,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-FF",
+      "near_stairs": "DB-STAIR-FF",
+      "accessibility": "stairs_only",
+      "unconfirmed": false,
+      "notes": "Capacity absent from source data; inferred from plan geometry and CONFIGURABLE."
+    },
+    {
+      "code": "LH13",
+      "building": "DB",
+      "floor": "FF",
+      "label": "LH13 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 55,
+      "exam_capacity": 27,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-FF",
+      "near_stairs": "DB-STAIR-FF",
+      "accessibility": "stairs_only",
+      "unconfirmed": true,
+      "notes": "Blueprint shows LH13/LH14; the statement says LH01-LH12. Blueprint wins, flagged unconfirmed."
+    },
+    {
+      "code": "LH14",
+      "building": "DB",
+      "floor": "FF",
+      "label": "LH14 (Deeksha Bhawan)",
+      "rtype": "CLASS",
+      "capacity": 55,
+      "exam_capacity": 27,
+      "bookable": true,
+      "permitted_uses": [
+        "CLASS",
+        "TUTORIAL",
+        "EXAM",
+        "EVENT",
+        "VIVA"
+      ],
+      "features": [
+        "whiteboard",
+        "power"
+      ],
+      "zone": "DB-FF",
+      "near_stairs": "DB-STAIR-FF",
+      "accessibility": "stairs_only",
+      "unconfirmed": true,
+      "notes": "Blueprint shows LH13/LH14; the statement says LH01-LH12. Blueprint wins, flagged unconfirmed."
+    }
+  ],
+  "period_grid": {
+    "timezone": "Asia/Kolkata",
+    "days": [
+      "MON",
+      "TUE",
+      "WED",
+      "THU",
+      "FRI",
+      "SAT"
+    ],
+    "periods": [
+      {
+        "id": "P1",
+        "start": "09:00",
+        "end": "09:55"
+      },
+      {
+        "id": "P2",
+        "start": "09:55",
+        "end": "10:50"
+      },
+      {
+        "id": "P3",
+        "start": "10:50",
+        "end": "11:45"
+      },
+      {
+        "id": "P4",
+        "start": "11:45",
+        "end": "12:40"
+      },
+      {
+        "id": "P5",
+        "start": "13:30",
+        "end": "14:25"
+      },
+      {
+        "id": "P6",
+        "start": "14:25",
+        "end": "15:20"
+      },
+      {
+        "id": "P7",
+        "start": "15:20",
+        "end": "16:15"
+      },
+      {
+        "id": "P8",
+        "start": "16:15",
+        "end": "17:10"
+      }
+    ],
+    "lunch": {
+      "start": "12:40",
+      "end": "13:30"
+    },
+    "granularity_minutes": 5,
+    "note": "Bookings are arbitrary half-open intervals [start,end) snapped to 5 minutes. The period grid exists only for the official timetable and for reporting."
+  }
+}
