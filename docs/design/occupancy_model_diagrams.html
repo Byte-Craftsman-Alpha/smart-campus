@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Room allocation model — corrected design in diagrams</title>
+<style>
+  :root{
+    --ink:#14181f; --ink2:#3d4655; --ink3:#65707f; --line:#e2e6ec; --line2:#cfd6e0;
+    --wash:#f6f8fb; --wash2:#eef2f8; --brand:#2f4bd6; --brand-soft:#eaeefc;
+    --ok:#0f8a5f; --ok-soft:#e6f6ef; --warn:#b0700a; --warn-soft:#fdf4e3;
+    --bad:#b3372f; --bad-soft:#fdeceb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#fff;color:var(--ink);font-size:15.5px;line-height:1.62;
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .page{max-width:1020px;margin:0 auto;padding:0 28px 80px}
+  h1{font-size:31px;font-weight:800;line-height:1.22;margin:0;letter-spacing:-.01em}
+  h2{font-size:22px;font-weight:750;margin:46px 0 4px;padding-top:14px;border-top:2px solid var(--ink)}
+  h2 .n{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--brand);display:block;margin-bottom:3px}
+  p{margin:10px 0}
+  ul{margin:10px 0;padding-left:22px} li{margin:5px 0}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.9px;background:var(--wash2);padding:1.5px 5px;border-radius:4px}
+  pre{background:#161b23;color:#e6edf3;padding:14px 16px;border-radius:10px;overflow-x:auto;font-size:12.4px;line-height:1.6;margin:14px 0}
+  pre code{background:none;padding:0;color:inherit}
+  .lede{font-size:16px;color:var(--ink2)}
+  .cover{border:2px solid var(--ink);border-radius:14px;padding:26px 30px;margin:32px 0 6px;background:linear-gradient(180deg,#fff,#f7f9fd)}
+  .kicker{font-size:11.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin-bottom:9px}
+  .box{border-left:4px solid var(--brand);background:var(--brand-soft);border-radius:0 9px 9px 0;padding:12px 17px;margin:16px 0}
+  .box.good{border-color:var(--ok);background:var(--ok-soft)}
+  .box.bad{border-color:var(--bad);background:var(--bad-soft)}
+  .box.warn{border-color:var(--warn);background:var(--warn-soft)}
+  .box p:first-child{margin-top:0}.box p:last-child{margin-bottom:0}
+  .box .t{font-weight:800;font-size:12.2px;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:5px;color:var(--brand)}
+  .box.good .t{color:var(--ok)} .box.bad .t{color:var(--bad)} .box.warn .t{color:var(--warn)}
+  figure{margin:20px 0 8px} figcaption{font-size:12.8px;color:var(--ink3);margin-top:8px;text-align:center}
+  svg{max-width:100%;height:auto;display:block;margin:0 auto}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px}
+  th{text-align:left;background:var(--wash2);font-weight:700;color:var(--ink2);padding:8px 10px;border:1px solid var(--line2);font-size:12.6px}
+  td{padding:8px 10px;border:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#fafbfd}
+  .keb{font-size:12px;fill:#14181f;font-weight:700}
+  .ket{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;fill:#3d4655}
+  .kec{font-size:11px;fill:#65707f}
+  .foot{margin-top:52px;padding-top:14px;border-top:1px solid var(--line);font-size:12.6px;color:var(--ink3)}
+  .pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:20px;margin-right:4px}
+  .pill.b{background:var(--brand-soft);color:#26399f}.pill.g{background:var(--ok-soft);color:#0a6647}
+  .pill.r{background:var(--bad-soft);color:#8e2a23}.pill.w{background:var(--warn-soft);color:#8a5706}
+  @media (max-width:760px){.page{padding:0 14px 60px} h1{font-size:24px} h2{font-size:19px}}
+  @media print{body{font-size:10.5pt}.page{max-width:none;padding:0}h2,figure,table{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="cover">
+  <div class="kicker">Smart Campus · design correction</div>
+  <h1>Room allocation: the corrected model, in diagrams</h1>
+  <p class="lede">Six pictures that explain why "room is free / occupied" fails, and what to build instead: reservations as <strong>intervals</strong>, availability <strong>derived</strong>, conflicts enforced by the <strong>database</strong>, and attendance kept <strong>out</strong> of allocation entirely.</p>
+  <p class="lede" style="margin-top:8px"><a href="/home/user/smart-campus/occupancy_model_diagrams.md" style="color:#2f4bd6">occupancy_model_diagrams.md</a> holds all seven diagrams as copy-pasteable <strong>Mermaid</strong> source — this page renders them so you can read them without a runtime.</p>
+</div>
+
+<h2><span class="n">Diagram 1</span>Why a free/occupied toggle fails</h2>
+
+<p>A room is not a switch — it is a <strong>timeline of reservations</strong>. Here is one morning on three rooms. The hatched block is a class that was <em>cancelled</em>: the booking row still exists with <code>status = CANCELLED</code>, and only the unrest of the window returned to the pool.</p>
+
+<figure>
+<svg viewBox="0 0 900 290" role="img" aria-label="Timeline of rooms IET20, IET19 and LH08 across a morning showing bookings, a cancelled block and free windows">
+  <rect width="900" height="290" fill="#fbfcfe"/>
+  <text x="16" y="24" class="keb" style="font-size:13px">Wednesday 09:00 – 12:40 · availability is computed from bookings, never stored as a flag</text>
+
+  <!-- axis -->
+  <g>
+    <line x1="150" y1="52" x2="860" y2="52" stroke="#cfd6e0"/>
+    <text x="150" y="46" class="kec" text-anchor="middle">09:00</text>
+    <text x="327" y="46" class="kec" text-anchor="middle">09:55</text>
+    <text x="505" y="46" class="kec" text-anchor="middle">10:50</text>
+    <text x="682" y="46" class="kec" text-anchor="middle">11:45</text>
+    <text x="855" y="46" class="kec" text-anchor="middle">12:40</text>
+    <line x1="150" y1="52" x2="150" y2="210" stroke="#e2e6ec" stroke-dasharray="3 3"/>
+    <line x1="327" y1="52" x2="327" y2="210" stroke="#e2e6ec" stroke-dasharray="3 3"/>
+    <line x1="505" y1="52" x2="505" y2="210" stroke="#e2e6ec" stroke-dasharray="3 3"/>
+    <line x1="682" y1="52" x2="682" y2="210" stroke="#e2e6ec" stroke-dasharray="3 3"/>
+    <line x1="860" y1="52" x2="860" y2="210" stroke="#e2e6ec" stroke-dasharray="3 3"/>
+  </g>
+
+  <!-- IET20 -->
+  <text x="140" y="80" class="ket" text-anchor="end" style="font-weight:700">IET20</text>
+  <text x="140" y="94" class="kec" text-anchor="end">cap 75</text>
+  <rect x="150" y="62" width="177" height="34" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="238" y="83" class="ket" text-anchor="middle">CSE-2A DBMS</text>
+  <rect x="327" y="62" width="177" height="34" fill="url(#hatch)" stroke="#d99a95"/>
+  <text x="415" y="78" class="ket" text-anchor="middle" style="fill:#8e2a23">CANCELLED</text>
+  <text x="415" y="91" class="kec" text-anchor="middle" style="font-size:9.5px; fill:#8e2a23">row kept · slot freed</text>
+  <rect x="505" y="62" width="177" height="34" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="593" y="83" class="ket" text-anchor="middle">CSE-3A practical</text>
+  <rect x="682" y="62" width="178" height="34" fill="#fff" stroke="#cfd6e0" stroke-dasharray="4 3"/>
+  <text x="771" y="83" class="kec" text-anchor="middle">free</text>
+
+  <!-- IET19 -->
+  <text x="140" y="138" class="ket" text-anchor="end" style="font-weight:700">IET19</text>
+  <text x="140" y="152" class="kec" text-anchor="end">cap 75</text>
+  <rect x="150" y="120" width="177" height="34" fill="#eaeefc" stroke="#8f9fe8"/>
+  <text x="238" y="141" class="ket" text-anchor="middle">AIML-2B Maths</text>
+  <rect x="327" y="120" width="533" height="34" fill="#fff" stroke="#cfd6e0" stroke-dasharray="4 3"/>
+  <text x="593" y="141" class="kec" text-anchor="middle">free — 3 periods available</text>
+
+  <!-- LH08 -->
+  <text x="140" y="196" class="ket" text-anchor="end" style="font-weight:700">LH08</text>
+  <text x="140" y="210" class="kec" text-anchor="end">Deeksha</text>
+  <rect x="150" y="178" width="710" height="34" fill="#fff" stroke="#cfd6e0" stroke-dasharray="4 3"/>
+  <text x="505" y="199" class="kec" text-anchor="middle">free all morning · 100 m from IET · still needs a walk-time penalty</text>
+
+  <!-- legend -->
+  <rect x="150" y="240" width="16" height="12" fill="#e6f6ef" stroke="#7fbfa4"/><text x="173" y="250" class="kec">confirmed booking</text>
+  <rect x="300" y="240" width="16" height="12" fill="url(#hatch)" stroke="#d99a95"/><text x="323" y="250" class="kec">cancelled — released, history intact</text>
+  <rect x="570" y="240" width="16" height="12" fill="#fff" stroke="#cfd6e0" stroke-dasharray="3 2"/><text x="593" y="250" class="kec">free (derived)</text>
+  <text x="150" y="275" class="kec" style="font-size:10.5px">A toggle model can only say "IET20 is occupied" — it cannot answer "is IET19 free tomorrow at 10:00, and for how long?"</text>
+  <defs>
+    <pattern id="hatch" width="7" height="7" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <rect width="7" height="7" fill="#fdeceb"/><line x1="0" y1="0" x2="0" y2="7" stroke="#d99a95" stroke-width="2.5"/>
+    </pattern>
+  </defs>
+</svg>
+<figcaption>Diagram 1 — derived availability. Free is a gap between reservations, not a value in a column.</figcaption>
+</figure>
+
+<figure>
+<svg viewBox="0 0 900 330" role="img" aria-label="Flowchart: a query is answered by unioning bookings, timetable slots and closures, then testing intersection">
+  <rect width="900" height="330" fill="#fbfcfe"/>
+  <defs><marker id="a1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#65707f"/></marker></defs>
+  <rect x="300" y="14" width="300" height="40" rx="8" fill="#eef2f8" stroke="#cfd6e0"/>
+  <text x="450" y="39" class="ket" text-anchor="middle">Q: is IET20 free tomorrow 10:00–10:55?</text>
+
+  <rect x="340" y="78" width="220" height="34" rx="17" fill="#eaeefc" stroke="#8f9fe8"/>
+  <text x="450" y="100" class="keb" text-anchor="middle">derived query — 3 sources</text>
+  <line x1="450" y1="54" x2="450" y2="76" stroke="#65707f" marker-end="url(#a1)"/>
+
+  <rect x="20" y="140" width="270" height="46" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="155" y="160" class="ket" text-anchor="middle">CONFIRMED bookings</text>
+  <text x="155" y="175" class="kec" text-anchor="middle">status IN (CONFIRMED, PENDING)</text>
+  <rect x="315" y="140" width="270" height="46" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="450" y="160" class="ket" text-anchor="middle">TimetableSlot</text>
+  <text x="450" y="175" class="kec" text-anchor="middle">official recurring classes</text>
+  <rect x="610" y="140" width="270" height="46" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="745" y="160" class="ket" text-anchor="middle">RoomClosure</text>
+  <text x="745" y="175" class="kec" text-anchor="middle">repairs, holidays, events</text>
+  <line x1="400" y1="112" x2="180" y2="138" stroke="#65707f" marker-end="url(#a1)"/>
+  <line x1="450" y1="112" x2="450" y2="138" stroke="#65707f" marker-end="url(#a1)"/>
+  <line x1="500" y1="112" x2="720" y2="138" stroke="#65707f" marker-end="url(#a1)"/>
+
+  <rect x="330" y="210" width="240" height="34" rx="7" fill="#eef2f8" stroke="#cfd6e0"/>
+  <text x="450" y="232" class="ket" text-anchor="middle">UNION of occupied intervals</text>
+  <line x1="155" y1="186" x2="400" y2="208" stroke="#65707f" marker-end="url(#a1)"/>
+  <line x1="450" y1="186" x2="450" y2="208" stroke="#65707f" marker-end="url(#a1)"/>
+  <line x1="745" y1="186" x2="500" y2="208" stroke="#65707f" marker-end="url(#a1)"/>
+
+  <polygon points="450,262 545,290 450,318 355,290" fill="#fff" stroke="#aeb9c9"/>
+  <text x="450" y="294" class="kec" text-anchor="middle" style="font-size:10.5px">window ∩ occupied?</text>
+  <line x1="450" y1="244" x2="450" y2="260" stroke="#65707f" marker-end="url(#a1)"/>
+
+  <rect x="640" y="268" width="240" height="44" rx="7" fill="#fdeceb" stroke="#d99a95"/>
+  <text x="760" y="286" class="ket" text-anchor="middle" style="fill:#8e2a23">NOT AVAILABLE</text>
+  <text x="760" y="302" class="kec" text-anchor="middle" style="font-size:10px">→ 3 ranked alternatives</text>
+  <line x1="540" y1="290" x2="638" y2="290" stroke="#65707f" marker-end="url(#a1)"/>
+  <text x="588" y="284" class="kec" style="font-size:10px">yes</text>
+
+  <rect x="20" y="268" width="300" height="44" rx="7" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="170" y="286" class="ket" text-anchor="middle" style="fill:#0a6647">AVAILABLE</text>
+  <text x="170" y="302" class="kec" text-anchor="middle" style="font-size:10px">capacity · features · accessibility all pass</text>
+  <line x1="360" y1="290" x2="322" y2="290" stroke="#65707f" marker-end="url(#a1)"/>
+  <text x="338" y="284" class="kec" style="font-size:10px">no</text>
+</svg>
+<figcaption>Diagram 2 — the whole of requirement 1 in one query. Miss any of the three sources and you will offer a room where a class is already running.</figcaption>
+</figure>
+
+<div class="box bad">
+  <span class="t">The four failures of the toggle model</span>
+  <p><strong>1 ·</strong> Cannot answer "free tomorrow 10:00–10:55", only "free now". <strong>2 ·</strong> Freeing by clearing the record destroys the history requirement 7 demands. <strong>3 ·</strong> A class that began at 10:00 still occupies the room at 10:20 — mid-period release is worthless in practice. <strong>4 ·</strong> "0 present" is indistinguishable from "class cancelled", which is exactly the ambiguity that cost students the NSS exam.</p>
+</div>
+
+<h2><span class="n">Diagram 3</span>One booking can double-book three different things</h2>
+
+<p>A room-only check catches the first case and silently permits the other two. Section clash is the one most teams forget — and it is the one students suffer from.</p>
+
+<figure>
+<svg viewBox="0 0 900 300" role="img" aria-label="Entity relationship diagram of rooms, bookings, sections, users and timetable slots">
+  <rect width="900" height="300" fill="#fbfcfe"/>
+  <defs><marker id="a2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#8794a8"/></marker></defs>
+
+  <rect x="16" y="20" width="150" height="60" rx="7" fill="#eef2f8" stroke="#cfd6e0"/>
+  <text x="26" y="40" class="keb">Building</text><text x="26" y="57" class="ket">has_lift · distance</text><text x="26" y="71" class="ket">entry_gate</text>
+  <rect x="16" y="110" width="150" height="46" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="26" y="130" class="keb">Floor</text><text x="26" y="147" class="ket">level 0 / 1 / 2</text>
+  <rect x="16" y="186" width="188" height="104" rx="7" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="26" y="206" class="keb">Room</text>
+  <text x="26" y="223" class="ket">code · type · floor</text>
+  <text x="26" y="239" class="ket">capacity</text>
+  <text x="26" y="255" class="ket">exam_capacity ← spaced</text>
+  <text x="26" y="271" class="ket">bookable · accessibility</text>
+  <text x="26" y="285" class="ket">features[] · unconfirmed</text>
+  <rect x="16" y="304" width="188" height="0"/>
+
+  <rect x="330" y="180" width="220" height="120" rx="8" fill="#2f4bd6" stroke="#243a9e"/>
+  <text x="342" y="200" class="keb" style="fill:#fff">Booking</text>
+  <text x="342" y="217" class="ket" style="fill:#dfe4fb">time_range  tstzrange [start,end)</text>
+  <text x="342" y="233" class="ket" style="fill:#dfe4fb">purpose · headcount</text>
+  <text x="342" y="249" class="ket" style="fill:#dfe4fb">status · reason</text>
+  <text x="342" y="265" class="ket" style="fill:#dfe4fb">room_id · section_id</text>
+  <text x="342" y="281" class="ket" style="fill:#dfe4fb">requested_by · is_test</text>
+
+  <rect x="330" y="24" width="200" height="62" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="340" y="44" class="keb">Section</text><text x="340" y="61" class="ket">code CSE-3A</text><text x="340" y="77" class="ket">branch · year · strength</text>
+  <rect x="330" y="104" width="200" height="52" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="340" y="124" class="keb">TimetableSlot</text><text x="340" y="141" class="ket">course · day · period · room</text>
+  <rect x="596" y="24" width="150" height="62" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="606" y="44" class="keb">User</text><text x="606" y="61" class="ket">role</text><text x="606" y="77" class="ket">section_id?</text>
+  <rect x="596" y="104" width="150" height="52" rx="7" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="606" y="124" class="keb">RoomClosure</text><text x="606" y="141" class="ket">interval · reason</text>
+  <rect x="780" y="104" width="104" height="52" rx="7" fill="#fdeceb" stroke="#d99a95"/>
+  <text x="790" y="124" class="keb">Report</text><text x="790" y="141" class="ket">kind · status</text>
+  <rect x="596" y="180" width="150" height="52" rx="7" fill="#eef2f8" stroke="#cfd6e0"/>
+  <text x="606" y="200" class="keb">AuditEvent</text><text x="606" y="217" class="ket">append-only</text>
+  <rect x="780" y="180" width="104" height="52" rx="7" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="790" y="200" class="keb">Announce</text><text x="790" y="217" class="ket">scope · severity</text>
+
+  <line x1="91" y1="80" x2="91" y2="108" stroke="#8794a8" marker-end="url(#a2)"/>
+  <line x1="91" y1="156" x2="91" y2="184" stroke="#8794a8" marker-end="url(#a2)"/>
+  <line x1="204" y1="230" x2="328" y2="230" stroke="#8794a8" marker-end="url(#a2)"/>
+  <line x1="430" y1="86" x2="430" y2="102" stroke="#8794a8" marker-end="url(#a2)"/>
+  <line x1="430" y1="156" x2="430" y2="178" stroke="#8794a8" marker-end="url(#a2)"/>
+  <line x1="530" y1="210" x2="594" y2="210" stroke="#8794a8" stroke-dasharray="4 3" marker-end="url(#a2)"/>
+  <line x1="550" y1="240" x2="594" y2="300" stroke="#8794a8" stroke-dasharray="4 3"/>
+  <line x1="671" y1="156" x2="700" y2="178" stroke="#8794a8" stroke-dasharray="4 3"/>
+  <line x1="671" y1="86" x2="700" y2="102" stroke="#8794a8" stroke-dasharray="4 3"/>
+  <text x="612" y="252" class="kec" style="font-size:9.5px">comments</text>
+</svg>
+<figcaption>Diagram 3 — the entities. Everything hangs off <code>Booking.time_range</code>, the only place time is allowed to overlap.</figcaption>
+</figure>
+
+<pre><code>-- 1 · no room is double-booked
+EXCLUDE USING gist (room_id     WITH =, time_range WITH &amp;&amp;) WHERE (status IN ('CONFIRMED','PENDING'));
+
+-- 2 · no SECTION sits in two rooms at once   ← the one teams forget
+EXCLUDE USING gist (section_id  WITH =, time_range WITH &amp;&amp;) WHERE (status IN ('CONFIRMED','PENDING'));
+
+-- 3 · no FACULTY sits in two rooms at once
+EXCLUDE USING gist (requested_by WITH =, time_range WITH &amp;&amp;) WHERE (status IN ('CONFIRMED','PENDING'));</code></pre>
+
+<h2><span class="n">Diagram 4</span>Booking lifecycle — cancel, never delete</h2>
+
+<figure>
+<svg viewBox="0 0 900 250" role="img" aria-label="State machine for a booking: pending approval, confirmed, completed, cancelled, rejected">
+  <rect width="900" height="250" fill="#fbfcfe"/>
+  <defs><marker id="a3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#65707f"/></marker></defs>
+  <circle cx="40" cy="100" r="8" fill="#14181f"/>
+  <rect x="80" y="76" width="150" height="48" rx="24" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="155" y="105" class="keb" text-anchor="middle">CONFIRMED</text>
+  <rect x="80" y="160" width="150" height="48" rx="24" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="155" y="182" class="keb" text-anchor="middle" style="font-size:11px">PENDING_APPROVAL</text>
+  <text x="155" y="196" class="kec" text-anchor="middle" style="font-size:9px">holds the slot</text>
+  <rect x="300" y="20" width="140" height="44" rx="22" fill="#fff" stroke="#aeb9c9"/>
+  <text x="370" y="47" class="keb" text-anchor="middle">COMPLETED</text>
+  <rect x="300" y="106" width="140" height="44" rx="22" fill="#eef2f8" stroke="#cfd6e0"/>
+  <text x="370" y="133" class="keb" text-anchor="middle">reschedule</text>
+  <rect x="520" y="160" width="150" height="48" rx="24" fill="#fdeceb" stroke="#d99a95"/>
+  <text x="595" y="182" class="keb" text-anchor="middle" style="fill:#8e2a23">CANCELLED</text>
+  <text x="595" y="196" class="kec" text-anchor="middle" style="font-size:9px">reason mandatory</text>
+  <rect x="520" y="76" width="150" height="44" rx="22" fill="#fdeceb" stroke="#d99a95"/>
+  <text x="595" y="103" class="keb" text-anchor="middle" style="fill:#8e2a23">REJECTED</text>
+  <circle cx="760" cy="184" r="8" fill="#14181f"/>
+
+  <line x1="48" y1="100" x2="78" y2="100" stroke="#65707f" marker-end="url(#a3)"/>
+  <line x1="48" y1="104" x2="78" y2="178" stroke="#65707f" marker-end="url(#a3)"/>
+  <text x="60" y="150" class="kec" style="font-size:9px">approval</text>
+  <line x1="155" y1="160" x2="155" y2="126" stroke="#65707f" marker-end="url(#a3)"/>
+  <text x="162" y="146" class="kec" style="font-size:9px">approve</text>
+  <line x1="155" y1="176" x2="516" y2="176" stroke="#65707f" stroke-dasharray="4 3" marker-end="url(#a3)"/>
+  <text x="330" y="170" class="kec" style="font-size:9px">reject / withdraw</text>
+  <line x1="230" y1="92" x2="298" y2="52" stroke="#65707f" marker-end="url(#a3)"/>
+  <text x="240" y="66" class="kec" style="font-size:9px">time passes</text>
+  <line x1="230" y1="112" x2="298" y2="124" stroke="#65707f" marker-end="url(#a3)"/>
+  <line x1="440" y1="124" x2="230" y2="106" stroke="#65707f" marker-end="url(#a3)"/>
+  <text x="300" y="112" class="kec" style="font-size:9px">new interval</text>
+  <line x1="230" y1="104" x2="516" y2="168" stroke="#65707f" marker-end="url(#a3)"/>
+  <text x="342" y="140" class="kec" style="font-size:9px">cancel + reason</text>
+  <line x1="670" y1="184" x2="752" y2="184" stroke="#65707f" marker-end="url(#a3)"/>
+  <text x="80" y="236" class="kec" style="font-size:10.5px">No transition is a DELETE. The row survives, so requirement 7's history is the row itself — and the interval is reusable the moment <tspan style="font-weight:700">status</tspan> leaves the constraint's scope.</text>
+</svg>
+<figcaption>Diagram 4 — five states, one approval gate, zero deletions.</figcaption>
+</figure>
+
+<div class="box warn">
+  <span class="t">Why PENDING must hold the slot</span>
+  <p>If a pending Seminar-Hall request does not occupy the interval, three faculty can each be "approved" for the same room. Pending bookings therefore participate in the exclusion constraint — they just cannot be <em>completed</em> until approved.</p>
+</div>
+
+<h2><span class="n">Diagram 5</span>The three operations — and nothing else</h2>
+
+<p>Suggestion is a <strong>read</strong>. Only reservation is a <strong>write</strong>. That separation is why a stale suggestion can never corrupt the schedule: the database re-decides at insert time.</p>
+
+<figure>
+<svg viewBox="0 0 900 470" role="img" aria-label="Flowchart from faculty input through suggestion, reservation, conflict handling and release">
+  <rect width="900" height="470" fill="#fbfcfe"/>
+  <defs><marker id="a4" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#65707f"/></marker></defs>
+
+  <rect x="250" y="14" width="400" height="44" rx="8" fill="#eef2f8" stroke="#cfd6e0"/>
+  <text x="450" y="33" class="ket" text-anchor="middle">Faculty enters: headcount · subject · year · branch</text>
+  <text x="450" y="49" class="ket" text-anchor="middle">section · date · time · purpose</text>
+
+  <rect x="230" y="84" width="440" height="60" rx="8" fill="#eaeefc" stroke="#8f9fe8"/>
+  <text x="450" y="105" class="keb" text-anchor="middle">SUGGEST — read only</text>
+  <text x="450" y="121" class="kec" text-anchor="middle" style="font-size:10.5px">bookable · capacity ≥ headcount · purpose permitted</text>
+  <text x="450" y="135" class="kec" text-anchor="middle" style="font-size:10.5px">features · accessibility · no overlap with bookings/timetable/closures</text>
+  <line x1="450" y1="58" x2="450" y2="82" stroke="#65707f" marker-end="url(#a4)"/>
+
+  <polygon points="450,168 520,196 450,224 380,196" fill="#fff" stroke="#aeb9c9"/>
+  <text x="450" y="200" class="kec" text-anchor="middle" style="font-size:10.5px">candidates?</text>
+  <line x1="450" y1="144" x2="450" y2="166" stroke="#65707f" marker-end="url(#a4)"/>
+
+  <rect x="600" y="172" width="280" height="48" rx="7" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="740" y="192" class="ket" text-anchor="middle">nearest free windows (±30 min)</text>
+  <text x="740" y="208" class="kec" text-anchor="middle" style="font-size:10px">or split the group across 2 rooms</text>
+  <line x1="520" y1="196" x2="598" y2="196" stroke="#65707f" marker-end="url(#a4)"/>
+  <text x="556" y="190" class="kec" style="font-size:10px">no</text>
+
+  <rect x="220" y="248" width="460" height="50" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="450" y="268" class="keb" text-anchor="middle">ranked list with reasons</text>
+  <text x="450" y="285" class="kec" text-anchor="middle" style="font-size:10.5px">capacityFit .22 · sameBuilding .20 · sameFloor .12 · purposeFit .12</text>
+  <line x1="450" y1="224" x2="450" y2="246" stroke="#65707f" marker-end="url(#a4)"/>
+  <text x="458" y="240" class="kec" style="font-size:10px">yes</text>
+
+  <rect x="230" y="322" width="440" height="56" rx="8" fill="#2f4bd6" stroke="#243a9e"/>
+  <text x="450" y="343" class="keb" text-anchor="middle" style="fill:#fff">RESERVE — one transaction</text>
+  <text x="450" y="359" class="kec" text-anchor="middle" style="font-size:10.5px; fill:#dfe4fb">INSERT booking + BookingEvent + AuditEvent + notice outbox</text>
+  <text x="450" y="372" class="kec" text-anchor="middle" style="font-size:10px; fill:#aebcf7">the exclusion constraint is the real conflict check</text>
+  <line x1="450" y1="298" x2="450" y2="320" stroke="#65707f" marker-end="url(#a4)"/>
+
+  <polygon points="450,404 540,428 450,452 360,428" fill="#fff" stroke="#aeb9c9"/>
+  <text x="450" y="432" class="kec" text-anchor="middle" style="font-size:10.5px">23P01?</text>
+  <line x1="450" y1="378" x2="450" y2="402" stroke="#65707f" marker-end="url(#a4)"/>
+
+  <rect x="600" y="404" width="280" height="48" rx="7" fill="#fdeceb" stroke="#d99a95"/>
+  <text x="740" y="424" class="ket" text-anchor="middle" style="fill:#8e2a23">409 + 3 re-validated alternatives</text>
+  <text x="740" y="440" class="kec" text-anchor="middle" style="font-size:10px">never a dead end</text>
+  <line x1="540" y1="428" x2="598" y2="428" stroke="#65707f" marker-end="url(#a4)"/>
+  <text x="560" y="422" class="kec" style="font-size:10px">yes</text>
+  <path d="M740,404 L740,300 L682,300" fill="none" stroke="#65707f" stroke-dasharray="4 3" marker-end="url(#a4)"/>
+
+  <rect x="20" y="404" width="300" height="48" rx="7" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="170" y="424" class="ket" text-anchor="middle" style="fill:#0a6647">CONFIRMED</text>
+  <text x="170" y="440" class="kec" text-anchor="middle" style="font-size:10px">appears on the section's schedule + notice feed</text>
+  <line x1="360" y1="428" x2="322" y2="428" stroke="#65707f" marker-end="url(#a4)"/>
+  <text x="330" y="422" class="kec" style="font-size:10px">no</text>
+</svg>
+<figcaption>Diagram 5 — suggest → reserve → release. Three operations carry the entire product.</figcaption>
+</figure>
+
+<h2><span class="n">Diagram 6</span>Why the race is not a code problem</h2>
+
+<figure>
+<svg viewBox="0 0 900 420" role="img" aria-label="Sequence diagram of two concurrent booking requests where the database rejects the second">
+  <rect width="900" height="420" fill="#fbfcfe"/>
+  <defs><marker id="a5" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d4655"/></marker></defs>
+
+  <rect x="40" y="14" width="120" height="34" rx="6" fill="#fff" stroke="#aeb9c9"/><text x="100" y="36" class="ket" text-anchor="middle">Faculty A</text>
+  <rect x="250" y="14" width="120" height="34" rx="6" fill="#fff" stroke="#aeb9c9"/><text x="310" y="36" class="ket" text-anchor="middle">Faculty B</text>
+  <rect x="450" y="14" width="140" height="34" rx="6" fill="#eaeefc" stroke="#8f9fe8"/><text x="520" y="36" class="ket" text-anchor="middle">API</text>
+  <rect x="680" y="14" width="150" height="34" rx="6" fill="#2f4bd6" stroke="#243a9e"/><text x="755" y="36" class="ket" text-anchor="middle" style="fill:#fff">PostgreSQL</text>
+
+  <line x1="100" y1="48" x2="100" y2="390" stroke="#cfd6e0" stroke-dasharray="4 4"/>
+  <line x1="310" y1="48" x2="310" y2="390" stroke="#cfd6e0" stroke-dasharray="4 4"/>
+  <line x1="520" y1="48" x2="520" y2="390" stroke="#cfd6e0" stroke-dasharray="4 4"/>
+  <line x1="755" y1="48" x2="755" y2="390" stroke="#cfd6e0" stroke-dasharray="4 4"/>
+
+  <line x1="100" y1="76" x2="516" y2="76" stroke="#3d4655" marker-end="url(#a5)"/>
+  <text x="308" y="70" class="ket" text-anchor="middle" style="font-size:10.5px">POST /bookings · IET19 · 10:00–10:55</text>
+  <line x1="310" y1="100" x2="516" y2="100" stroke="#3d4655" marker-end="url(#a5)"/>
+  <text x="413" y="94" class="ket" text-anchor="middle" style="font-size:10.5px">POST /bookings · IET19 · 10:00–10:55</text>
+
+  <rect x="452" y="112" width="290" height="56" rx="6" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="597" y="130" class="kec" text-anchor="middle" style="font-size:10px">both SELECT for overlapping bookings</text>
+  <text x="597" y="145" class="kec" text-anchor="middle" style="font-size:10px">both find none — a check-then-write race</text>
+  <text x="597" y="160" class="kec" text-anchor="middle" style="font-size:10px; fill:#b3372f">❌ an app-level check cannot save you here</text>
+
+  <line x1="520" y1="192" x2="751" y2="192" stroke="#3d4655" marker-end="url(#a5)"/>
+  <text x="636" y="186" class="ket" text-anchor="middle" style="font-size:10.5px">INSERT booking (A)</text>
+  <line x1="751" y1="216" x2="524" y2="216" stroke="#0f8a5f" marker-end="url(#a5)"/>
+  <text x="636" y="210" class="ket" text-anchor="middle" style="font-size:10.5px; fill:#0a6647">OK — committed</text>
+  <line x1="516" y1="240" x2="98" y2="240" stroke="#0f8a5f" stroke-dasharray="5 3" marker-end="url(#a5)"/>
+  <text x="410" y="234" class="ket" text-anchor="middle" style="font-size:10px; fill:#0a6647">201 Created</text>
+
+  <line x1="520" y1="268" x2="751" y2="268" stroke="#3d4655" marker-end="url(#a5)"/>
+  <text x="636" y="262" class="ket" text-anchor="middle" style="font-size:10.5px">INSERT booking (B)</text>
+  <line x1="751" y1="292" x2="524" y2="292" stroke="#b3372f" marker-end="url(#a5)"/>
+  <text x="636" y="286" class="ket" text-anchor="middle" style="font-size:10.5px; fill:#8e2a23">SQLSTATE 23P01 — EXCLUDE violated</text>
+
+  <line x1="516" y1="318" x2="314" y2="318" stroke="#b3372f" stroke-dasharray="5 3" marker-end="url(#a5)"/>
+  <text x="415" y="312" class="ket" text-anchor="middle" style="font-size:10px; fill:#8e2a23">409 + 3 ranked alternatives</text>
+
+  <rect x="60" y="342" width="780" height="46" rx="7" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="450" y="361" class="ket" text-anchor="middle" style="fill:#0a6647">Exactly one booking exists. Overlap is unrepresentable in storage, not merely "unlikely" in code.</text>
+  <text x="450" y="378" class="kec" text-anchor="middle" style="font-size:10px">Test it with 20 parallel identical requests: 1 × 201, 19 × 409 — that is the acceptance criterion.</text>
+</svg>
+<figcaption>Diagram 6 — the conflict is resolved by the last line of defence, which is the right one.</figcaption>
+</figure>
+
+<h2><span class="n">Diagram 7</span>Attendance is not an allocation signal</h2>
+
+<p>The single most important separation in the whole model — and the exact point where the original idea was wrong.</p>
+
+<figure>
+<svg viewBox="0 0 900 300" role="img" aria-label="Diagram showing allocation and academic record kept separate, with a forbidden link between them">
+  <rect width="900" height="300" fill="#fbfcfe"/>
+  <defs><marker id="a6" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#65707f"/></marker>
+  <marker id="a6b" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b3372f"/></marker></defs>
+
+  <rect x="24" y="40" width="330" height="150" rx="10" fill="#e6f6ef" stroke="#7fbfa4" stroke-width="1.5"/>
+  <text x="189" y="64" class="keb" text-anchor="middle">ALLOCATION — reservations</text>
+  <rect x="60" y="82" width="258" height="46" rx="6" fill="#fff" stroke="#7fbfa4"/>
+  <text x="189" y="102" class="ket" text-anchor="middle">Booking</text>
+  <text x="189" y="118" class="kec" text-anchor="middle" style="font-size:10px">room · interval · status · reason</text>
+  <text x="189" y="150" class="kec" text-anchor="middle" style="font-size:10.5px">answers: is it free? where can I go?</text>
+  <text x="189" y="168" class="kec" text-anchor="middle" style="font-size:10.5px">mutated only by reserve / release</text>
+
+  <rect x="546" y="40" width="330" height="150" rx="10" fill="#eaeefc" stroke="#8f9fe8" stroke-width="1.5"/>
+  <text x="711" y="64" class="keb" text-anchor="middle">ACADEMIC RECORD — facts</text>
+  <rect x="582" y="82" width="258" height="46" rx="6" fill="#fff" stroke="#8f9fe8"/>
+  <text x="711" y="102" class="ket" text-anchor="middle">Attendance</text>
+  <text x="711" y="118" class="kec" text-anchor="middle" style="font-size:10px">present · absent · class-cancelled</text>
+  <text x="711" y="150" class="kec" text-anchor="middle" style="font-size:10.5px">answers: who was there? eligibility?</text>
+  <text x="711" y="168" class="kec" text-anchor="middle" style="font-size:10.5px">contestable by the student</text>
+
+  <line x1="354" y1="100" x2="542" y2="180" stroke="#b3372f" stroke-width="2" marker-end="url(#a6b)"/>
+  <line x1="546" y1="100" x2="358" y2="180" stroke="#b3372f" stroke-width="2" marker-end="url(#a6b)"/>
+  <circle cx="450" cy="140" r="17" fill="#fdeceb" stroke="#b3372f" stroke-width="1.5"/>
+  <text x="450" y="146" class="keb" text-anchor="middle" style="fill:#8e2a23; font-size:14px">✕</text>
+  <text x="450" y="222" class="kec" text-anchor="middle" style="font-size:10.5px; fill:#8e2a23">NO link. "Mark 0 present" must never free a room.</text>
+
+  <rect x="24" y="240" width="852" height="46" rx="7" fill="#fff" stroke="#cfd6e0"/>
+  <text x="450" y="259" class="kec" text-anchor="middle" style="font-size:10.5px">A class that started at 10:00 still occupies the room at 10:20 — students, bags, lab equipment, exam papers. Mid-period release has no practical value.</text>
+  <text x="450" y="276" class="kec" text-anchor="middle" style="font-size:10.5px">Worse: it creates a perverse incentive (mark students absent → win a better slot) and destroys the present/absent vs cancelled distinction.</text>
+</svg>
+<figcaption>Diagram 7 — two tables, two purposes, one forbidden arrow.</figcaption>
+</figure>
+
+<div class="box good">
+  <span class="t">What replaces the "mark 0 present" instinct</span>
+  <p><strong>1 · Planned cancellation (the one that matters):</strong> "tomorrow's P3 is cancelled" → status change + notice to the affected sections + slot becomes bookable. Real reuse is planned, not accidental.</p>
+  <p><strong>2 · Early release (partial):</strong> the faculty member shortens the booking — <code>end_at = now</code> — and only the remainder of the period returns to the pool. Gate it to the booking owner, ≥30 min before start, with an audit event.</p>
+  <p><strong>3 · No-show handling, if you want it:</strong> an admin-only flag after the period ends. It affects reporting only; it never rewrites history.</p>
+</div>
+
+<h2>What changed vs the original idea</h2>
+
+<table>
+  <thead><tr><th style="width:22%">Concept</th><th style="width:33%">Original</th><th style="width:45%">Corrected</th></tr></thead>
+  <tbody>
+    <tr><td>Room state</td><td><code>FREE</code> / <code>OCCUPIED</code> flag</td><td>reservations as intervals; availability <strong>derived</strong> per query</td></tr>
+    <tr><td>Freeing a room</td><td>clear/delete the record</td><td><code>status = CANCELLED</code> + mandatory reason; row kept forever</td></tr>
+    <tr><td>What frees it</td><td>"0 present" attendance</td><td>explicit cancellation or early release — <strong>never</strong> attendance</td></tr>
+    <tr><td>Conflict check</td><td><code>if (room.isFree)</code> in app code</td><td><code>EXCLUDE USING gist</code> in PostgreSQL (20 parallel requests → one 201, nineteen 409)</td></tr>
+    <tr><td>What is checked</td><td>the room only</td><td>room <strong>+ section + faculty</strong></td></tr>
+    <tr><td>Capacity</td><td>one number</td><td><code>capacity</code> + <code>exam_capacity</code> (spaced seating — only IET32 and the Library qualify for 75-student exams)</td></tr>
+    <tr><td>Suggestion</td><td>the answer</td><td>a read-only hint; the DB re-decides at insert</td></tr>
+    <tr><td>Rooms to seed</td><td>IET14/15/16, LH04/05</td><td>all <strong>34</strong> (30 bookable) — including IET32, the Library, and LH01/02/08/09</td></tr>
+  </tbody>
+</table>
+
+<div class="foot">
+  <p><strong>Smart Campus Classroom Management — corrected occupancy model.</strong> Rendered companion to <code>occupancy_model_diagrams.md</code>, which contains all seven diagrams as Mermaid source for GitHub, mermaid.live, Obsidian or VS Code. Facts about rooms and capacities come from the supplied IET / Deeksha Bhawan blueprint; requirements map to the problem statement's eight numbered capabilities.</p>
+</div>
+
+</div>
+</body>
+</html>

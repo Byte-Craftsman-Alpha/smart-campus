@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Campus Classroom Management — Build Blueprint (DDUGU IET + Deeksha Bhawan)</title>
+<style>
+  :root{
+    --ink:#14181f; --ink2:#3d4655; --ink3:#65707f; --line:#e2e6ec; --line2:#cfd6e0;
+    --bg:#ffffff; --wash:#f6f8fb; --wash2:#eef2f8;
+    --brand:#2f4bd6; --brand-soft:#eaeefc; --accent:#0f8a5f; --accent-soft:#e6f6ef;
+    --warn:#b0700a; --warn-soft:#fdf4e3; --danger:#b3372f; --danger-soft:#fdeceb;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:15.5px; line-height:1.62; -webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:1080px; margin:0 auto; padding:0 30px 90px}
+  h1,h2,h3,h4{line-height:1.24; margin:0; letter-spacing:-0.01em}
+  h1{font-size:34px; font-weight:800}
+  h2{font-size:25px; font-weight:750; margin:52px 0 6px; padding-top:16px; border-top:2px solid var(--ink)}
+  h3{font-size:18.5px; font-weight:700; margin:32px 0 8px; color:var(--ink)}
+  h4{font-size:15.5px; font-weight:700; margin:22px 0 6px; color:var(--ink2)}
+  p{margin:10px 0}
+  ul,ol{margin:10px 0; padding-left:22px}
+  li{margin:5px 0}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12.9px;
+       background:var(--wash2); padding:1.5px 5px; border-radius:4px; color:#1d2733}
+  pre{background:#161b23; color:#e6edf3; padding:16px 18px; border-radius:10px; overflow-x:auto;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12.6px; line-height:1.62; margin:14px 0}
+  pre code{background:none; padding:0; color:inherit; font-size:inherit}
+  .small{font-size:13px; color:var(--ink3)}
+  .sec-num{font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--brand); display:block; margin-bottom:4px}
+  table{border-collapse:collapse; width:100%; margin:14px 0; font-size:13.4px}
+  th{text-align:left; background:var(--wash2); font-weight:700; color:var(--ink2); padding:8px 10px;
+     border:1px solid var(--line2); vertical-align:bottom; font-size:12.4px; letter-spacing:.02em}
+  td{padding:8px 10px; border:1px solid var(--line); vertical-align:top}
+  tbody tr:nth-child(even){background:#fafbfd}
+  .t-narrow{font-size:12.6px}
+  .cap{font-size:12.6px; color:var(--ink3); margin:4px 0 0}
+  .cover{border:2px solid var(--ink); border-radius:14px; padding:30px 32px; margin:34px 0 8px; background:linear-gradient(180deg,#fff, #f7f9fd)}
+  .kicker{font-size:11.5px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--brand); margin-bottom:10px}
+  .lede{font-size:16.5px; color:var(--ink2); margin-top:14px}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px 0}
+  .grid3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin:16px 0}
+  .card{border:1px solid var(--line2); border-radius:11px; padding:14px 16px; background:#fff}
+  .card h4{margin-top:0}
+  .box{border-left:4px solid var(--brand); background:var(--brand-soft); border-radius:0 9px 9px 0; padding:13px 18px; margin:16px 0}
+  .box.good{border-color:var(--accent); background:var(--accent-soft)}
+  .box.warn{border-color:var(--warn); background:var(--warn-soft)}
+  .box.bad{border-color:var(--danger); background:var(--danger-soft)}
+  .box p:first-child{margin-top:0} .box p:last-child{margin-bottom:0}
+  .box .t{font-weight:800; font-size:12.4px; letter-spacing:.08em; text-transform:uppercase; display:block; margin-bottom:5px}
+  .box .t{color:var(--brand)} .box.good .t{color:var(--accent)} .box.warn .t{color:var(--warn)} .box.bad .t{color:var(--danger)}
+  .toc{border:1px solid var(--line2); border-radius:12px; padding:18px 22px; background:var(--wash); margin:26px 0}
+  .toc ol{columns:2; column-gap:34px; margin:8px 0 0; padding-left:20px; font-size:13.8px}
+  .toc a{color:var(--ink2); text-decoration:none; border-bottom:1px dotted var(--line2)}
+  .pill{display:inline-block; font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+        padding:2.5px 8px; border-radius:20px; background:var(--wash2); color:var(--ink2); margin-right:4px}
+  .pill.b{background:var(--brand-soft); color:#26399f}
+  .pill.g{background:var(--accent-soft); color:#0a6647}
+  .pill.w{background:var(--warn-soft); color:#8a5706}
+  .pill.r{background:var(--danger-soft); color:#8e2a23}
+  .mono-sm{font-family:ui-monospace,Menlo,monospace; font-size:12.4px}
+  figure{margin:20px 0}
+  figcaption{font-size:12.9px; color:var(--ink3); margin-top:7px; text-align:center}
+  svg{max-width:100%; height:auto; display:block; margin:0 auto}
+  .ket{font-family:ui-monospace,Menlo,monospace; font-size:11.5px; fill:#3d4655}
+  .keb{font-size:12px; fill:#14181f; font-weight:600}
+  .kec{font-size:11px; fill:#65707f}
+  hr{border:0; border-top:1px solid var(--line); margin:34px 0}
+  .foot{margin-top:60px; padding-top:16px; border-top:1px solid var(--line); font-size:12.6px; color:var(--ink3)}
+  @media (max-width:760px){
+    .grid2,.grid3{grid-template-columns:1fr}
+    .toc ol{columns:1}
+    h2{font-size:21px} h1{font-size:26px}
+    .page{padding:0 16px 60px}
+  }
+  @media print{
+    body{font-size:10.5pt} .page{max-width:none; padding:0}
+    h2{page-break-after:avoid; break-after:avoid}
+    table,figure,pre{page-break-inside:avoid}
+    .card,.box,.toc{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="cover">
+  <div class="kicker">Build With AI: DevOps 2026 &nbsp;·&nbsp; GDG on Campus, DDU Gorakhpur University</div>
+  <h1>Smart Campus Classroom Management System</h1>
+  <p class="lede"><strong>A build blueprint, not a pitch.</strong> This document reads the supplied problem statement and the architect's floor plan line by line, extracts every structural constraint the buildings actually impose, reconciles the five places where the written spec and the drawing disagree, and then derives the most efficient and most convenient way to build the working prototype — data model, conflict engine, AI layer, stack choice, DevOps pipeline and a ten-day plan.</p>
+  <p class="lede" style="margin-top:10px">It is written so a team can open it on day one and start committing code on day one.</p>
+</div>
+
+<div class="grid3">
+  <div class="card">
+    <h4>The one-line architecture</h4>
+    <p class="small" style="margin-bottom:0">One TypeScript codebase (Next.js App Router on Vercel) + one managed PostgreSQL, where the <em>database itself</em> — via a <code>tstzrange</code> exclusion constraint — makes double-booking physically impossible, and the AI is a thin natural-language front door that is never trusted with a write.</p>
+  </div>
+  <div class="card">
+    <h4>The one insight that decides the design</h4>
+    <p class="small" style="margin-bottom:0">Of the 30 bookable rooms, only <strong>2</strong> (Seminar Hall IET32, 200 seats; Library, 180) can seat a 75-student section in <em>spaced exam seating</em>. Conflict prevention is therefore not a CRUD concern — it is a scarce-resource allocation problem, and the alternative-suggestion engine is the product.</p>
+  </div>
+  <div class="card">
+    <h4>The one constraint teams forget</h4>
+    <p class="small" style="margin-bottom:0">IET and Deeksha Bhawan are 100&nbsp;m and one staircase apart, with no lift in either building. Every recommendation must charge a <strong>time-and-effort penalty</strong>, or the system will cheerfully schedule a section into a room they cannot physically reach in time — which is the exact failure the problem statement was written about.</p>
+  </div>
+</div>
+
+<div class="toc">
+  <strong style="font-size:13.5px">Contents</strong>
+  <ol>
+    <li><a href="#s1">Requirement decomposition &amp; acceptance criteria</a></li>
+    <li><a href="#s2">Structural analysis of the two buildings</a></li>
+    <li><a href="#s3">Mapping the supplied data onto the campus</a></li>
+    <li><a href="#s4">Domain model &amp; the time-correctness spine</a></li>
+    <li><a href="#s5">Algorithms: availability, conflict, alternatives</a></li>
+    <li><a href="#s6">The AI layer, done safely</a></li>
+    <li><a href="#s7">Stack decision &amp; system architecture</a></li>
+    <li><a href="#s8">Roles, permissions, accountability</a></li>
+    <li><a href="#s9">Announcements, student access, notifications</a></li>
+    <li><a href="#s10">DevOps: repo, CI/CD, testing, resilience</a></li>
+    <li><a href="#s11">The ten-day build plan</a></li>
+    <li><a href="#s12">Demo script mapped to the rubric</a></li>
+    <li><a href="#s13">Risk register</a></li>
+    <li><a href="#s14">Appendices: API, schema, env, checklist</a></li>
+  </ol>
+</div>
+
+<div class="box good">
+  <span class="t">How to use this document</span>
+  <p>§2 and §3 are <em>analysis</em> — they are what makes the prototype defensible in front of judges, because they show you understood the campus, not just the CRUD. §4–§7 are <em>design decisions with reasons</em>; each one carries an explicit "because" so it survives a "why did you do it this way?" question. §10–§12 are <em>execution</em>: what to build, in what order, and how to demo it. If you only have ten minutes, read the three cards above, §2.5 (the space-time budget) and §5.4 (the scoring function) — those three carry most of the project's difficulty.</p>
+</div>
+
+<h2 id="s1"><span class="sec-num">Section 1</span>Requirement decomposition &amp; acceptance criteria</h2>
+
+<p>The problem statement has eight numbered capabilities. The efficient way to build this is to treat each one as a <em>testable</em> acceptance criterion and to write the test before the feature. That single habit converts the deliverable from "a demo that works when clicked in a lucky order" into "a system with evidence".</p>
+
+<table class="t-narrow">
+  <thead>
+    <tr><th style="width:4%">#</th><th style="width:19%">Statement requirement</th><th style="width:29%">What it becomes in the system</th><th style="width:30%">Acceptance test (behaviour, not implementation)</th><th style="width:18%">Sub-system</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td><strong>Room availability</strong> — search by building, floor, room, date, time slot, duration, capacity</td><td><code>GET /api/rooms/availability</code> — a faceted query returning only rooms whose <em>free intervals</em> contain the requested window and whose effective capacity ≥ headcount</td><td>Given a fully booked IET first floor at 10:00, a request for <em>building=IET, 10:00–11:00, capacity≥70</em> returns zero rooms; widening to <em>any building</em> returns LH01/LH02/LH08/LH09 and reports their distance and walk time</td><td>Availability service</td></tr>
+    <tr><td>2</td><td><strong>Faculty booking</strong> — extra classes, minor exams, practicals, events</td><td><code>POST /api/bookings</code> with a <em>purpose</em> enum that drives which rooms and which capacity rule apply</td><td>Four bookings created for the four purposes each persist with the correct purpose code and appear in the room's timeline</td><td>Booking service</td></tr>
+    <tr><td>3</td><td><strong>Conflict prevention</strong> + suitable alternatives</td><td>Overlap is impossible at the storage layer; a rejected request returns <code>409</code> carrying 3 scored alternatives</td><td>Two concurrent requests for the same room and slot: exactly one succeeds (test with 20 parallel requests), the loser receives ranked alternatives that are themselves conflict-free</td><td>Conflict engine</td></tr>
+    <tr><td>4</td><td><strong>Schedule updates</strong> — cancellations, rescheduling, exam notices, announcements</td><td>Announcement entity with scope (campus / building / section / room) + a "supersedes" link to the affected booking</td><td>Cancelling a booking generates a notice that appears on the affected section's schedule within one refresh, and the old slot is immediately re-offered as available</td><td>Notice service</td></tr>
+    <tr><td>5</td><td><strong>Student access</strong> — view schedules, comment/report without modifying bookings</td><td>Read-only schedule views + a <code>Report</code> entity with a lifecycle. No student route can touch <code>Booking</code></td><td>Student token calling <code>PATCH /api/bookings/:id</code> gets <code>403</code> (tested). Student can file a report, and the report thread is attached to the booking without changing any booking field</td><td>Access control</td></tr>
+    <tr><td>6</td><td><strong>Role-based access</strong> — faculty, student, administrator</td><td>Server-side policy module; a single <code>can(actor, action, resource)</code> function used by every route</td><td>Permission matrix test: every (role × route) pair asserted — students cannot book, faculty cannot publish campus-wide notices without admin approval, admins can override</td><td>Authz policy</td></tr>
+    <tr><td>7</td><td><strong>Accountability</strong> — history of important bookings and changes</td><td>Append-only <code>AuditEvent</code> table, written in the same transaction as every mutation; plus booking version history</td><td>Replaying the audit log reconstructs the exact state of any room at any past timestamp; no API exposes UPDATE/DELETE on audit rows</td><td>Audit</td></tr>
+    <tr><td>8</td><td><strong>Intelligent assistance</strong> — recommend rooms/slots, validated against real bookings</td><td>Scoring/ranking engine behind both the UI and the AI layer; every recommendation re-validated against the DB immediately before display</td><td>For each of 40 scripted requests the returned top-3 rooms contain no room that is actually booked in that window (property-based test over randomly generated booking sets)</td><td>Recommendation engine</td></tr>
+  </tbody>
+</table>
+
+<div class="box">
+  <span class="t">Why this framing is the most efficient path</span>
+  <p>Every row above is one file, one route, one test. That gives six or seven predictable work packages which can be built in parallel by a small team without merge chaos — and it gives the demo a script that walks the rubric in order instead of jumping around. Teams that start from the pretty UI and work backwards usually end up with a beautiful calendar that cannot survive two simultaneous bookings.</p>
+</div>
+
+<h2 id="s2"><span class="sec-num">Section 2</span>Structural analysis of the two buildings</h2>
+
+<p>This is the part most submissions skip, and it is the part that makes the software correct. Every architectural fact below becomes a rule in the code. The analysis reads the plan sheet supplied on page 2 of the problem statement.</p>
+
+<h3>2.1 IET — massing, circulation and what it means</h3>
+
+<p>IET is a rectangular, three-storey block with a <strong>single central staircase</strong> and a single entry gate on the ground floor, roughly centred on the long axis. Rooms are arranged in two parallel wings — a <em>north</em> row and a <em>south</em> row — separated by a corridor, with the stair core bisecting both rows. This "dumbbell" plan is the single most important structural fact in the whole campus, because it means:</p>
+
+<ul>
+  <li><strong>One stair core serves all three floors.</strong> Floor-change traffic for 600 students per year-batch funnels through one ~2 m stair. Add a stair-egress time to every cross-floor recommendation, and expect a bottleneck at period boundaries. Software implication: <em>never</em> schedule two activities for the same section that require an IET floor change with a zero gap; the minimum inter-activity buffer must cover a stair climb (see §2.5).</li>
+  <li><strong>No lift is drawn.</strong> The seminar hall (200 seats) and six classrooms sit on the second floor, and the four laboratories on the first. Any accessibility-sensitive use (an examination for a student with a mobility limitation, a guest lecture for external attendees) must prefer ground-floor spaces — Library in IET, LH01–LH07 in Deeksha Bhawan. Software implication: an <code>accessibility</code> field on every room plus an <code>accessible_only</code> filter flag on bookings.</li>
+  <li><strong>Rooms are paired across the corridor.</strong> The north and south rooms facing each other are "adjacent pairs". Two parallel sessions that a student body must hop between (e.g. a viva panel and its waiting room) are cheapest to run in an adjacent pair. Software implication: a <code>zone</code> field enabling an "adjacency bonus" in the ranking function.</li>
+  <li><strong>The entry gate is central and single.</strong> Arrival and dispersal of a 200-person event loads one door. Software implication: for events above a headcount threshold, surface an <em>advisory</em> ("single entry gate; stagger entry by 10 minutes") — a small touch that reads as genuine campus awareness in a demo.</li>
+</ul>
+
+<h3>2.2 IET floor-by-floor inventory (as drawn)</h3>
+
+<table class="t-narrow">
+  <thead>
+    <tr><th style="width:10%">Floor</th><th style="width:13%">Code</th><th style="width:26%">Space (per blueprint)</th><th style="width:9%">Capacity</th><th style="width:11%">Type used</th><th style="width:31%">Notes / interpretation</th></tr>
+  </thead>
+  <tbody>
+    <tr><td rowspan="4"><strong>Ground</strong></td><td><code>LIB</code></td><td>Library</td><td>150–180</td><td>LIBRARY</td><td>Stated dual-use: reading hall <em>and</em> examination venue. The only large ground-floor space in IET.</td></tr>
+    <tr><td><code>TO</code></td><td>Teachers' Office (faculty cabins)</td><td>—</td><td>OFFICE</td><td>Not bookable. Anchor for faculty identity / approval routing.</td></tr>
+    <tr><td><code>PC</code></td><td>Placement Cell</td><td>—</td><td>OFFICE</td><td>Not bookable by default; admin-only interview use is an optional extension.</td></tr>
+    <tr><td><code>DO</code></td><td>Director's Office</td><td>—</td><td>OFFICE</td><td>Not bookable. Administrator role anchor.</td></tr>
+    <tr><td rowspan="2"><strong>First</strong></td><td><code>IET22</code> <code>IET16</code> <code>IET14</code> <code>IET15</code></td><td>North row — four rooms</td><td>~75 each</td><td>LAB</td><td><span class="pill w">discrepancy</span> The statement names the first-floor <em>laboratories</em> (CSE, ME, ECE, IT) but the drawing labels four plain rooms. Modelled as LABs mapped to branches, switchable to CLASS with one config row.</td></tr>
+    <tr><td><code>IET20</code> <code>IET19</code> <code>IET18</code> <code>IET17</code></td><td>South row — four rooms</td><td>~75 each</td><td>CLASS</td><td>Named explicitly in the statement as classrooms. Perfect agreement between sources.</td></tr>
+    <tr><td rowspan="2"><strong>Second</strong></td><td><code>IET32</code></td><td>Seminar Hall</td><td>~200</td><td>SEMINAR</td><td>Largest venue on campus; the natural overflow and exam hall — but second floor, no lift.</td></tr>
+    <tr><td><code>IET24</code> <code>IET25</code> <code>IET28</code> <code>IET29</code> <code>IET30</code> <code>IET23</code> + unlabelled store</td><td>North row (24, 25) + south row (30, 29, 28, 23)</td><td>~75 each</td><td>CLASS</td><td><span class="pill w">discrepancy</span> Statement lists five classrooms; the drawing shows six — <code>IET23</code> is drawn and labelled. A narrow unlabelled room beside the stair core is non-bookable.</td></tr>
+  </tbody>
+</table>
+
+<figure>
+<svg viewBox="0 0 900 300" role="img" aria-label="Simplified IET plan schematic showing two wings, central stair core and room order">
+  <rect x="0" y="0" width="900" height="300" fill="#fbfcfe"/>
+  <!-- legend/title -->
+  <text x="20" y="26" class="keb" style="font-size:13px">IET — schematic plan (as drawn): dumbbell layout, single central stair core</text>
+  <!-- Ground floor -->
+  <text x="20" y="58" class="kec" style="font-size:11px; font-weight:700; fill:#2f4bd6">GROUND FLOOR</text>
+  <rect x="120" y="44" width="660" height="46" fill="#eef2f8" stroke="#cfd6e0"/>
+  <rect x="125" y="48" width="220" height="38" fill="#fff" stroke="#aeb9c9"/>
+  <text x="235" y="71" class="ket" text-anchor="middle">LIBRARY (150–180)</text>
+  <rect x="350" y="48" width="200" height="38" fill="#fff" stroke="#aeb9c9"/>
+  <text x="450" y="71" class="ket" text-anchor="middle">TEACHERS' OFFICE</text>
+  <rect x="556" y="48" width="60" height="38" fill="#dfe5ef" stroke="#aeb9c9"/>
+  <text x="586" y="71" class="kec" text-anchor="middle" style="font-size:10px">STAIR</text>
+  <rect x="622" y="48" width="80" height="38" fill="#fff" stroke="#aeb9c9"/>
+  <text x="662" y="71" class="ket" text-anchor="middle" style="font-size:10px">PLACEMENT</text>
+  <rect x="706" y="48" width="70" height="38" fill="#fff" stroke="#aeb9c9"/>
+  <text x="741" y="71" class="ket" text-anchor="middle" style="font-size:10px">DIRECTOR</text>
+  <!-- First floor -->
+  <text x="20" y="128" class="kec" style="font-size:11px; font-weight:700; fill:#2f4bd6">FIRST FLOOR</text>
+  <rect x="120" y="114" width="660" height="64" fill="#eef2f8" stroke="#cfd6e0"/>
+  <g>
+    <rect x="125" y="118" width="180" height="24" fill="#e6f6ef" stroke="#7fbfa4"/><text x="215" y="134" class="ket" text-anchor="middle" style="font-size:10px">IET22 · LAB(CSE)</text>
+    <rect x="309" y="118" width="175" height="24" fill="#e6f6ef" stroke="#7fbfa4"/><text x="396" y="134" class="ket" text-anchor="middle" style="font-size:10px">IET16 · LAB(ME)</text>
+    <rect x="576" y="118" width="115" height="24" fill="#e6f6ef" stroke="#7fbfa4"/><text x="633" y="134" class="ket" text-anchor="middle" style="font-size:10px">IET14 · LAB</text>
+    <rect x="695" y="118" width="82" height="24" fill="#e6f6ef" stroke="#7fbfa4"/><text x="736" y="134" class="ket" text-anchor="middle" style="font-size:10px">IET15</text>
+    <rect x="540" y="118" width="32" height="24" fill="#dfe5ef" stroke="#aeb9c9"/><text x="556" y="134" class="kec" text-anchor="middle" style="font-size:9px">ST</text>
+    <rect x="125" y="150" width="180" height="24" fill="#fff" stroke="#aeb9c9"/><text x="215" y="166" class="ket" text-anchor="middle" style="font-size:10px">IET20 · CLASS 75</text>
+    <rect x="309" y="150" width="175" height="24" fill="#fff" stroke="#aeb9c9"/><text x="396" y="166" class="ket" text-anchor="middle" style="font-size:10px">IET19 · CLASS 75</text>
+    <rect x="488" y="150" width="180" height="24" fill="#fff" stroke="#aeb9c9"/><text x="578" y="166" class="ket" text-anchor="middle" style="font-size:10px">IET18 · CLASS 75</text>
+    <rect x="672" y="150" width="105" height="24" fill="#fff" stroke="#aeb9c9"/><text x="724" y="166" class="ket" text-anchor="middle" style="font-size:10px">IET17 · 75</text>
+  </g>
+  <!-- Second floor -->
+  <text x="20" y="216" class="kec" style="font-size:11px; font-weight:700; fill:#2f4bd6">SECOND FLOOR</text>
+  <rect x="120" y="200" width="660" height="64" fill="#eef2f8" stroke="#cfd6e0"/>
+  <g>
+    <rect x="125" y="204" width="230" height="24" fill="#eaeefc" stroke="#8f9fe8"/><text x="240" y="220" class="ket" text-anchor="middle" style="font-size:10px">SEMINAR HALL IET32 · 200</text>
+    <rect x="540" y="204" width="32" height="24" fill="#dfe5ef" stroke="#aeb9c9"/><text x="556" y="220" class="kec" text-anchor="middle" style="font-size:9px">ST</text>
+    <rect x="576" y="204" width="100" height="24" fill="#fff" stroke="#aeb9c9"/><text x="626" y="220" class="ket" text-anchor="middle" style="font-size:10px">IET24 · 75</text>
+    <rect x="680" y="204" width="97" height="24" fill="#fff" stroke="#aeb9c9"/><text x="728" y="220" class="ket" text-anchor="middle" style="font-size:10px">IET25 · 75</text>
+    <rect x="125" y="236" width="180" height="24" fill="#fff" stroke="#aeb9c9"/><text x="215" y="252" class="ket" text-anchor="middle" style="font-size:10px">IET30 · 75</text>
+    <rect x="309" y="236" width="175" height="24" fill="#fff" stroke="#aeb9c9"/><text x="396" y="252" class="ket" text-anchor="middle" style="font-size:10px">IET29 · 75</text>
+    <rect x="488" y="236" width="180" height="24" fill="#fff" stroke="#aeb9c9"/><text x="578" y="252" class="ket" text-anchor="middle" style="font-size:10px">IET28 · 75</text>
+    <rect x="672" y="236" width="105" height="24" fill="#fff" stroke="#aeb9c9"/><text x="724" y="252" class="ket" text-anchor="middle" style="font-size:10px">IET23 · 75</text>
+  </g>
+  <text x="20" y="288" class="kec" style="font-size:10.5px">Green = laboratory (per statement, rooms unlabelled on drawing) · Blue = seminar · Grey = stair core (single, central, serves all floors) · No lift in building</text>
+</svg>
+<figcaption>Figure 1 — IET reduced to the model the software needs: two parallel room rows, one central stair, one entry gate.</figcaption>
+</figure>
+
+<h3>2.3 Deeksha Bhawan — a loop plan, and why it changes the algorithm</h3>
+
+<p>Deeksha Bhawan is not a repeat of IET. It is a <strong>seven-room bowtie per floor</strong>: two long open-plan rooms along the north side (LH01, LH02 / LH08, LH09), two compact rooms flanking the core (LH03, LH04 / LH10, LH11), one room on the east (LH05 / LH12), and two rooms flanking the entry gate on the south (LH06, LH07 / LH13, LH14), with a washroom and a drinking-water point in the middle and a single stair beside the south entry.</p>
+
+<p>Three consequences that a shallow model would miss:</p>
+
+<ul>
+  <li><strong>The long north rooms are the only Deeksha rooms that can hold a full 75-student section.</strong> LH01, LH02, LH08 and LH09 run the full depth of the plan; LH03/04/11/12 and LH06/07/13/14 are visibly smaller. So Deeksha cannot be treated as "14 equivalent spare rooms" — it is <em>4 section-capable rooms plus 10 room-suitable-for-splits</em>. This is exactly the kind of distinction that determines whether an alternative suggestion is actually usable.</li>
+  <li><strong>The washroom and drinking-water core sits between LH03/LH04 and LH05.</strong> Those rooms are the noisiest and most footfall-heavy in the building — a bad choice for a minor examination, a fine choice for a tutorial. Encode it as a <code>disruption_penalty</code> on those rooms for EXAM purpose, not as a hard rule.</li>
+  <li><strong>One stair, at the south entry, for the entire first floor.</strong> LH08–LH12 are up a single stair from a single door 100 m from IET. Cross-building, cross-floor moves are the slowest possible journey on this campus (~340–410 s, see §2.5). The scheduler must treat that journey as expensive, and the UI must say so out loud when it recommends it.</li>
+</ul>
+
+<figure>
+<svg viewBox="0 0 900 250" role="img" aria-label="Deeksha Bhawan schematic plan showing room ring and core facilities">
+  <rect x="0" y="0" width="900" height="250" fill="#fbfcfe"/>
+  <text x="20" y="26" class="keb" style="font-size:13px">Deeksha Bhawan — schematic plan: bowtie/loop, single stair per floor, central washroom + drinking water</text>
+  <text x="20" y="58" class="kec" style="font-size:11px; font-weight:700; fill:#2f4bd6">GROUND FLOOR</text>
+  <rect x="110" y="44" width="700" height="80" fill="#eef2f8" stroke="#cfd6e0"/>
+  <rect x="118" y="50" width="410" height="20" fill="#e6f6ef" stroke="#7fbfa4"/><text x="323" y="64" class="ket" text-anchor="middle" style="font-size:10px">LH01 · long room · section-capable</text>
+  <rect x="140" y="74" width="360" height="18" fill="#e6f6ef" stroke="#7fbfa4"/><text x="320" y="87" class="ket" text-anchor="middle" style="font-size:10px">LH02 · long room · section-capable</text>
+  <ellipse cx="190" cy="108" rx="46" ry="14" fill="#fff" stroke="#aeb9c9"/><text x="190" y="112" class="kec" text-anchor="middle" style="font-size:9.5px">WASHROOM</text>
+  <rect x="242" y="96" width="90" height="24" fill="#fff" stroke="#aeb9c9"/><text x="287" y="112" class="ket" text-anchor="middle" style="font-size:10px">LH03</text>
+  <rect x="336" y="96" width="90" height="24" fill="#fff" stroke="#aeb9c9"/><text x="381" y="112" class="ket" text-anchor="middle" style="font-size:10px">LH04</text>
+  <rect x="440" y="100" width="34" height="16" transform="rotate(45 457 108)" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="458" y="112" class="kec" text-anchor="middle" style="font-size:8.5px">WATER</text>
+  <rect x="500" y="92" width="90" height="28" fill="#fff" stroke="#aeb9c9"/><text x="545" y="110" class="ket" text-anchor="middle" style="font-size:10px">LH05</text>
+  <rect x="640" y="74" width="34" height="46" fill="#dfe5ef" stroke="#aeb9c9"/><text x="657" y="101" class="kec" text-anchor="middle" style="font-size:9px">ST</text>
+  <rect x="118" y="124" width="170" height="0" fill="none"/>
+  <text x="20" y="158" class="kec" style="font-size:11px; font-weight:700; fill:#2f4bd6">FIRST FLOOR</text>
+  <rect x="110" y="144" width="700" height="80" fill="#eef2f8" stroke="#cfd6e0"/>
+  <rect x="118" y="150" width="410" height="20" fill="#e6f6ef" stroke="#7fbfa4"/><text x="323" y="164" class="ket" text-anchor="middle" style="font-size:10px">LH08 · long room · section-capable</text>
+  <rect x="140" y="174" width="360" height="18" fill="#e6f6ef" stroke="#7fbfa4"/><text x="320" y="187" class="ket" text-anchor="middle" style="font-size:10px">LH09 · long room · section-capable</text>
+  <ellipse cx="190" cy="208" rx="46" ry="14" fill="#fff" stroke="#aeb9c9"/><text x="190" y="212" class="kec" text-anchor="middle" style="font-size:9.5px">WASHROOM</text>
+  <rect x="242" y="196" width="90" height="24" fill="#fff" stroke="#aeb9c9"/><text x="287" y="212" class="ket" text-anchor="middle" style="font-size:10px">LH10</text>
+  <rect x="336" y="196" width="90" height="24" fill="#fff" stroke="#aeb9c9"/><text x="381" y="212" class="ket" text-anchor="middle" style="font-size:10px">LH11</text>
+  <rect x="440" y="200" width="34" height="16" transform="rotate(45 457 208)" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="458" y="212" class="kec" text-anchor="middle" style="font-size:8.5px">WATER</text>
+  <rect x="500" y="192" width="90" height="28" fill="#fff" stroke="#aeb9c9"/><text x="545" y="210" class="ket" text-anchor="middle" style="font-size:10px">LH12</text>
+  <rect x="640" y="174" width="34" height="46" fill="#dfe5ef" stroke="#aeb9c9"/><text x="657" y="201" class="kec" text-anchor="middle" style="font-size:9px">ST</text>
+  <text x="700" y="238" class="kec" style="font-size:10.5px">LH06, LH07 (GF) and LH13, LH14 (FF) flank the south entry; LH13/LH14 appear on the drawing but not in the statement text.</text>
+  <text x="20" y="238" class="kec" style="font-size:10.5px; font-weight:700">← IET is ~100 m west of this entry gate →</text>
+</svg>
+<figcaption>Figure 2 — Deeksha Bhawan's ring plan: a small number of large rooms, a large number of small rooms, and one vertical circulation core.</figcaption>
+</figure>
+
+<h3>2.4 From architecture to software rules</h3>
+
+<p>This table is the bridge. Each row is one observation from the drawings and the one line of code or one database column that carries it into the system. Nothing here is decoration; if a row is dropped, a class of wrong recommendations appears.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:27%">Structural observation</th><th style="width:37%">Software rule it becomes</th><th style="width:19%">Where it lives</th><th style="width:17%">Consequence if ignored</th></tr></thead>
+  <tbody>
+    <tr><td>Two buildings 100 m apart, no covered link</td><td>Inter-building move costs 240–410 s of "effort time"; a minimum 10-minute turnaround is enforced between consecutive activities for the same section</td><td><code>meta.inter_building</code> in the registry; <code>travelPenalty()</code> in the scorer</td><td>System "helpfully" books a section into Deeksha for the period right after an IET period; students arrive late — the original complaint, re-implemented</td></tr>
+    <tr><td>Single stair core in each building; no lift</td><td>Cross-floor moves cost a stair-climb penalty; <code>accessibility=stairs_only</code> blocks accessible requests</td><td><code>room.accessibility</code>; <code>floorPenalty()</code></td><td>Accessible-exam request silently routed to a second-floor room</td></tr>
+    <tr><td>Seminar hall seats 200 on the second floor</td><td>Preferred for large events/exams <em>except</em> when accessibility or quick-turnaround is required</td><td>Scoring weights + hard constraint filter</td><td>Best room rejected for the wrong reason, or chosen for the wrong one</td></tr>
+    <tr><td>Library is dual-use (150–180, ground floor, exam venue)</td><td>Bookable, but gated: only for EXAM/EVENT, only outside library hours, requires admin/Director approval</td><td><code>permitted_uses</code> + approval policy</td><td>The library gets booked for an extra lecture and the reading room disappears</td></tr>
+    <tr><td>Classrooms are ~75 seats; largest section is 75</td><td>Capacity rule is <code>capacity ≥ headcount</code> with <em>zero slack</em>; any split section or added guest must go elsewhere</td><td><code>capacity</code>, <code>exam_capacity</code></td><td>Overflow students stand in the corridor; attendance records become unreliable</td></tr>
+    <tr><td>Deeksha's long rooms are the only large rooms there</td><td>Per-room capacity values, not a single building-level default</td><td><code>capacity</code> per room (configurable)</td><td>"Available in Deeksha Bhawan" turns out to mean a 45-seat room for 75 students</td></tr>
+    <tr><td>Washroom/water core is adjacent to LH03/LH04/LH10/LH11</td><td>Soft <code>disruption_penalty</code> for EXAM purpose on those rooms</td><td>Scoring weights table</td><td>Minor exam scheduled next to the noisiest corner of the building</td></tr>
+    <tr><td>Offices are interleaved with teaching space on IET ground floor</td><td>Offices are non-bookable and excluded from availability</td><td><code>bookable=false</code></td><td>Faculty cabins appear in search results as "available rooms"</td></tr>
+    <tr><td>One entry gate per building</td><td>Event headcount advisory (stagger entry) above a threshold</td><td>UI advisory on booking confirmation</td><td>Cosmetic, but it is what makes a demo feel like it was built for this campus</td></tr>
+  </tbody>
+</table>
+
+<h3>2.5 The space-time budget — the number that justifies the whole project</h3>
+
+<p>Do the arithmetic the statement never does. It turns "we need a booking system" into "we need an allocation optimizer", which is a much stronger argument to a judge.</p>
+
+<div class="grid2">
+  <div class="card">
+    <h4>Demand side (from the supplied branch/batch data)</h4>
+    <ul class="small" style="margin-bottom:0">
+      <li>CSE 150 → sections A, B (75 each)</li>
+      <li>AI&nbsp;ML 150 → sections A, B (75 each)</li>
+      <li>AI&nbsp;DS 75 → A · ECE 75 → A · ME 75 → A · IT 75 → A</li>
+      <li><strong>600 students per year-batch · 8 sections per year</strong></li>
+      <li>Four years → <strong>2,400 students · 32 sections</strong></li>
+      <li>Largest single teaching unit: <strong>75 students</strong> (a full section)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>Supply side (from the blueprint)</h4>
+    <ul class="small" style="margin-bottom:0">
+      <li>Bookable rooms: <strong>30</strong> (16 IET + 14 Deeksha)</li>
+      <li>Teaching periods per day on the grid: <strong>8</strong> (09:00–17:10, lunch 12:40–13:30)</li>
+      <li>Room-period supply per day: 30 × 8 = <strong>240</strong></li>
+      <li>Rooms seating ≥75: <strong>20</strong>; in Deeksha only <strong>4</strong> (LH01, LH02, LH08, LH09)</li>
+      <li>Rooms seating a spaced 75-student exam: <strong>2</strong> (IET32, LIB)</li>
+    </ul>
+  </div>
+</div>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:44%">Scenario</th><th style="width:19%">Demand</th><th style="width:17%">Utilisation</th><th style="width:20%">Reading</th></tr></thead>
+  <tbody>
+    <tr><td>32 sections × 5 classroom periods/day</td><td>160 room-periods</td><td>66.7%</td><td>Comfortable on paper</td></tr>
+    <tr><td>32 sections × 6 periods/day (typical B.Tech load)</td><td>192 room-periods</td><td>80.0%</td><td>Fragile — one clash cascades</td></tr>
+    <tr><td>32 sections × 7 periods/day (exam week)</td><td>224 room-periods</td><td>93.3%</td><td>Effectively saturated</td></tr>
+    <tr><td>Peak slots (P1/P2/P5 concentrate ~55% of activity)</td><td>≈106 concurrent demands</td><td>—</td><td><strong>3.5× oversubscribed</strong> in the slots everyone wants</td></tr>
+    <tr><td>Minor exam for one full section, alternating-seat spacing</td><td>needs 150 effective seats</td><td>—</td><td><strong>Only IET32 (200) and Library (180) qualify</strong> — the NSS-exam failure mode is arithmetic, not incompetence</td></tr>
+  </tbody>
+</table>
+
+<div class="box bad">
+  <span class="t">The finding that should drive the demo</span>
+  <p>A 75-student minor examination with normal seat spacing does not fit in any classroom on this campus. It fits in the Seminar Hall, or in the Library, or it must be <em>split across two rooms</em> — which is exactly the kind of decision that gets lost when arrangements are circulated on WhatsApp. Build the split-exam suggestion ("Section A: 38 students in IET20, 37 in IET19, same time, one notice") and you have solved the specific incident the problem statement opens with. That single feature is worth more in a demo than ten generic screens.</p>
+</div>
+
+<p class="cap">Implementation note: keep <code>capacity</code> and <code>exam_capacity</code> as separate columns. Exam seating is a policy, not a property of the room — and policy changes (spacing rules, invigilation norms) shouldn't require a data migration.</p>
+<h2 id="s3"><span class="sec-num">Section 3</span>Mapping the supplied data onto the campus</h2>
+
+<h3>3.1 What you actually receive, and what is missing</h3>
+
+<p>The statement promises "student, branch, batch, and building datasets/blueprints". In practice the blueprint is an image (an architect's line drawing, not a data file) and the student dataset is a CSV/Excel export whose exact columns are unknown until you open it. Design for that uncertainty instead of being surprised by it.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:20%">Asset</th><th style="width:14%">Format</th><th style="width:33%">What it gives you reliably</th><th style="width:33%">What it does not give you</th></tr></thead>
+  <tbody>
+    <tr><td>Building blueprint</td><td>Image (page 2 of the PDF)</td><td>Room identity and codes, floor, relative geometry, adjacency, stair/entry positions, stated capacities (Library, Seminar Hall, IET classrooms), the 100 m IET↔Deeksha separation</td><td>Exact square footage, capacities for Deeksha rooms, door widths, lift presence, any timetable</td></tr>
+    <tr><td>Student dataset</td><td>CSV / XLSX</td><td>Roll numbers, names, branch, year/batch, probably section</td><td>Guaranteed section column, consistent branch spellings, email domain</td></tr>
+    <tr><td>Branch/batch dataset</td><td>CSV / XLSX / PDF</td><td>Headcounts per branch and year</td><td>Which physical rooms are assigned to which branch (no mapping is supplied)</td></tr>
+    <tr><td>Timetable</td><td><strong>Not supplied</strong></td><td>—</td><td>Everything about recurring classes. You must define a slot grid and seed a representative timetable, labelled as test data</td></tr>
+  </tbody>
+</table>
+
+<div class="box">
+  <span class="t">The efficient move</span>
+  <p>Convert the drawing into a machine-readable registry <em>once</em>, commit it as <code>campus_room_registry.json</code> (it is included alongside this document), and make the app seed from it. Never hand-type room data into components, SQL files or fixtures in three places — that is how a room ends up with capacity 75 in the UI and 200 in the database, which is precisely the class of bug the project exists to eliminate.</p>
+</div>
+
+<h3>3.2 The reconciliation ledger — five places the sources disagree</h3>
+
+<p>Judges love this table, because it proves you read both sources instead of skimming one. The rule that resolves every row is: <strong>the blueprint owns identity and geometry; the statement owns stated capacities; everything unstated is configurable and flagged.</strong></p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:5%">#</th><th style="width:22%">Conflict</th><th style="width:23%">Statement says</th><th style="width:23%">Blueprint shows</th><th style="width:27%">Resolution adopted (and why)</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>First-floor laboratories</td><td>Four labs: CSE, ME, ECE, IT</td><td>Four plain rooms: IET22, IET16, IET14, IET15 — no lab label anywhere</td><td>Room identity from the drawing; <code>room_type=LAB</code> with <code>lab_branch</code> from the statement. Flagged <code>unconfirmed</code>. One config row flips them to CLASS if organisers clarify.</td></tr>
+    <tr><td>2</td><td>Second-floor classroom count</td><td>Five: IET24, IET25, IET29, IET30, IET28</td><td>Six: the above <em>plus</em> IET23</td><td>Keep IET23 bookable, flagged <code>unconfirmed</code>. Nothing breaks either way: it is one row.</td></tr>
+    <tr><td>3</td><td>Deeksha Bhawan room count</td><td>"around 10–12 classrooms, LH01–LH12"</td><td>Fourteen: LH01–LH14 across two floors</td><td>Use LH01–LH14 (the drawing is specific), flag LH13/LH14 <code>unconfirmed</code>. The word "around" in the statement licenses this.</td></tr>
+    <tr><td>4</td><td>Deeksha Bhawan capacities</td><td>Not stated</td><td>Not stated</td><td>Inferred from relative plan area (long north rooms ≈ 80; medium flush rooms ≈ 55; compact core rooms ≈ 45), stored as editable config, and shown in the UI as "assumed" until an admin confirms.</td></tr>
+    <tr><td>5</td><td>Library availability</td><td>"Sometimes used for examinations"</td><td>A single large ground-floor room, adjacent to Teachers' Office</td><td>Bookable for EXAM/EVENT with an approval gate and library-hours exclusion — modelled as policy, not as a hard-coded denial.</td></tr>
+  </tbody>
+</table>
+
+<p>Implement the <code>unconfirmed</code> flag properly: render a subtle marker in the room list, expose it in the API, and put a single "Confirm room data" admin screen behind it. It converts an ambiguity from a hidden risk into a demonstrated strength.</p>
+
+<h3>3.3 The student dataset ingest pipeline</h3>
+
+<p>Assume the worst CSV and normalise once, at the boundary. Six stages, each a pure function with a unit test — this is roughly two hours of work that prevents a day of debugging:</p>
+
+<pre><code>raw CSV ──1─► parse ──2─► normalise ──3─► derive ──4─► validate ──5─► resolve sections ──6─► upsert
+          (header    (branch       (academic      (roll no.      (capacity-aware     (idempotent
+           detection)  aliases,     year, batch,    regex,         allocation at 75,   by roll number;
+                       trim)        section)        duplicates)    honour given)       dry-run diff)</code></pre>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:9%">Stage</th><th style="width:33%">Rule</th><th style="width:30%">Example</th><th style="width:28%">Failure handled</th></tr></thead>
+  <tbody>
+    <tr><td>1 Parse</td><td>Detect header row by looking for a column whose values match a roll-number pattern; accept CSV and the first sheet of XLSX</td><td>Sheet with a title row above the header</td><td>Exports that start with "DDUGU IET Student List 2025-26" in row 1</td></tr>
+    <tr><td>2 Normalise</td><td>Branch alias map (case/space/punctuation insensitive): <code>CSE</code>; <code>AI ML, AIML, AI-ML, AI&amp;ML, ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING</code> → <code>AIML</code>; <code>AI DS, AIDS, AI-DS, DATA SCIENCE</code> → <code>AIDS</code>; <code>ECE, E&amp;CE</code>; <code>ME, MECH</code>; <code>IT, I.T.</code></td><td>"A.I. &amp; M.L." → <code>AIML</code></td><td>The single most common reason a dataset "has 9 branches" when it has 6</td></tr>
+    <tr><td>3 Derive</td><td>Academic year = current academic year − admission year, clamped to 1–4; batch label = admission year (e.g. <code>2023-27</code>); if only a roll number exists, derive the year from its embedded code</td><td>Admitted 2023, AY 2025-26 → Year 3</td><td>Datasets that list only a batch string</td></tr>
+    <tr><td>4 Validate</td><td>Unique key = normalised roll number; reject blank branch/year; report every rejected row with a reason instead of dropping silently</td><td>42 rows rejected: "branch unrecognised: 'MECHANICAL'"</td><td>Silent data loss that surfaces as a mystery "missing student" during the demo</td></tr>
+    <tr><td>5 Resolve sections</td><td>If a section column exists, honour it. If not, allocate alphabetically by roll number at the stated cap (75 for CSE/AIML) — deterministic, reproducible, and it reproduces the statement's "A and B" split exactly</td><td>150 CSE students → A: 75, B: 75</td><td>Teams inventing random splits, which breaks repeatable demos</td></tr>
+    <tr><td>6 Upsert</td><td>Idempotent on roll number; a <code>--dry-run</code> prints the diff (new / updated / rejected) before writing</td><td><code>pnpm db:seed:students --dry-run</code></td><td>Re-running the seed duplicating 2,400 students and doubling every headcount</td></tr>
+  </tbody>
+</table>
+
+<h4>Derived identity model</h4>
+
+<p>Everything downstream keys off a small, stable set of identifiers. Fix these on day one; renaming any of them later costs hours.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:16%">Entity</th><th style="width:30%">Identifier</th><th style="width:54%">Example / derivation</th></tr></thead>
+  <tbody>
+    <tr><td>Building</td><td><code>IET</code> | <code>DB</code></td><td>Short codes only; display names live in a lookup, never in logic</td></tr>
+    <tr><td>Room</td><td>the drawn code, unique campus-wide</td><td><code>IET20</code>, <code>IET32</code>, <code>LIB</code>, <code>LH07</code> — do <em>not</em> invent <code>IET-FF-20</code>; the campus already says "IET20" out loud, and the tool must match the spoken language</td></tr>
+    <tr><td>Section</td><td><code>{BRANCH}-{YEAR}{SECTION}</code></td><td><code>CSE-3A</code>, <code>AIML-1B</code>, <code>ECE-2A</code> — 32 of them</td></tr>
+    <tr><td>Batch</td><td>admission year range</td><td><code>2023-27</code>; year of study derived, never stored as the only field</td></tr>
+    <tr><td>User</td><td>university email, lower-cased</td><td>Students: <code>rollno@…</code>; faculty: staff email; seeded demo users get an explicit <code>isDemo=true</code></td></tr>
+    <tr><td>Booking</td><td>UUID + human reference</td><td><code>BK-2026-000137</code> — humans quote references on the phone, UUIDs never get quoted</td></tr>
+  </tbody>
+</table>
+
+<h3>3.4 Configuration over hard-coding</h3>
+
+<p>Because five facts are genuinely unknown, the system must treat them as data. One <code>settings</code> table (or one typed config module) holds them; the UI reads from it; nothing is recompiled to change a policy.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:30%">Configurable fact</th><th style="width:22%">Default</th><th style="width:48%">Why it must be data</th></tr></thead>
+  <tbody>
+    <tr><td>Period grid &amp; lunch</td><td>8 × 55 min, lunch 12:40–13:30</td><td>Every college's grid differs; the demo may need to show a 3-hour practical</td></tr>
+    <tr><td>Exam seat-spacing factor</td><td>0.5</td><td>The single most consequential policy number on this campus (§2.5)</td></tr>
+    <tr><td>Cross-building minimum gap</td><td>10 min</td><td>Realistically 4–7 min; a policy choice, and a great thing to show changing live</td></tr>
+    <tr><td>Booking horizon &amp; lead time</td><td>60 days ahead, 15 min before start</td><td>Prevents past-dated and far-future bookings without extra code</td></tr>
+    <tr><td>Approval thresholds</td><td>Seminar Hall / Library / events &gt; 100 people need admin sign-off</td><td>Maps directly onto who actually controls those rooms</td></tr>
+    <tr><td>Room capacities</td><td>per room, from the registry</td><td>Five of them are inferred (§3.2 row 4)</td></tr>
+  </tbody>
+</table>
+
+<h3>3.5 Test-data policy</h3>
+
+<p>The statement explicitly allows test bookings but requires them to be identifiable. The cheapest correct implementation is two flags plus one naming convention, applied everywhere:</p>
+
+<ul>
+  <li><code>Booking.isTest = true</code> for every seeded booking, rendered with a visible <span class="pill w">TEST</span> chip in every list, calendar and PDF.</li>
+  <li>A <code>seed_source</code> column (<code>demo</code> | <code>user</code>) so a single command (<code>pnpm db:reset:test</code>) removes every seeded record without touching real ones.</li>
+  <li>Demo accounts named <code>faculty.demo@</code>, <code>student.demo@</code>, <code>admin.demo@</code> and listed on the login screen for the judges.</li>
+  <li>The seeded timetable is labelled as a <em>representative</em> timetable in the UI and in the README — "we invented the slot distribution, not the rooms or the students".</li>
+</ul>
+
+<h2 id="s4"><span class="sec-num">Section 4</span>Domain model &amp; the time-correctness spine</h2>
+
+<h3>4.1 Entities, and why each one earns its place</h3>
+
+<p>Sixteen tables is the right size: enough to express the problem, few enough to hold in your head. Anything you cannot justify in one sentence is scope creep.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:17%">Entity</th><th style="width:41%">Purpose / key fields</th><th style="width:42%">Justification (the sentence that earns the table)</th></tr></thead>
+  <tbody>
+    <tr><td><code>Building</code></td><td><code>id</code>, <code>name</code>, <code>distance_to_iet_m</code>, <code>has_lift</code>, <code>entry_gate</code></td><td>Two buildings with different physics is a first-class fact, not a string prefix on a room code.</td></tr>
+    <tr><td><code>Floor</code></td><td><code>building_id</code>, <code>level</code> (0/1/2), <code>label</code></td><td>Cross-floor movement is a cost, so floor has to be queryable.</td></tr>
+    <tr><td><code>Room</code></td><td><code>code</code>, <code>floor_id</code>, <code>type</code>, <code>capacity</code>, <code>exam_capacity</code>, <code>bookable</code>, <code>accessibility</code>, <code>zone</code>, <code>permitted_uses[]</code>, <code>unconfirmed</code></td><td>The atom the entire system allocates; almost every constraint is an attribute of a room.</td></tr>
+    <tr><td><code>RoomClosure</code></td><td><code>room_id</code>, <code>interval</code>, <code>reason</code></td><td>Rooms go out of service (repairs, events, holidays). Without this, the engine recommends a room under renovation.</td></tr>
+    <tr><td><code>Section</code></td><td><code>code</code>, <code>branch</code>, <code>year</code>, <code>strength</code></td><td>The demand unit. Capacity checks are against section strength, not against a vague "class size".</td></tr>
+    <tr><td><code>User</code></td><td><code>email</code>, <code>name</code>, <code>role</code>, <code>section_id?</code>, <code>department</code></td><td>One table for three roles keeps auth trivial; the nullable section links a student to their schedule.</td></tr>
+    <tr><td><code>Course</code></td><td><code>code</code>, <code>title</code>, <code>branch</code>, <code>year</code>, <code>required_features[]</code></td><td>Ties a booking to a curriculum item, and declares what the room must provide (a lab needs lab benches).</td></tr>
+    <tr><td><code>TimetableSlot</code></td><td><code>course_id</code>, <code>section_id</code>, <code>room_id</code>, <code>day</code>, <code>period</code>, <code>valid_from</code>, <code>valid_to</code></td><td>Official recurring classes are the background load that makes availability hard — they must live in the database, not in the faculty's head.</td></tr>
+    <tr><td><code>Booking</code></td><td><code>room_id</code>, <code>time_range</code> (<code>tstzrange</code>), <code>purpose</code>, <code>section_id?</code>, <code>headcount</code>, <code>requested_by</code>, <code>status</code>, <code>is_test</code>, <code>idempotency_key</code>, <code>version</code></td><td>The core fact of the system. <code>purpose</code> drives the policy; <code>headcount</code> drives capacity; <code>version</code> drives optimistic locking.</td></tr>
+    <tr><td><code>BookingSeries</code></td><td><code>recurrence</code> (RRULE), <code>parent_booking_id</code></td><td>Extra lectures run weekly; "cancel the rest of the series" must be one action, not twelve deletions.</td></tr>
+    <tr><td><code>BookingEvent</code></td><td><code>booking_id</code>, <code>type</code> (created/moved/cancelled/approved), <code>actor</code>, <code>at</code>, <code>payload</code></td><td>Accountability (requirement 7) needs the booking's own biography, including who moved it and to where.</td></tr>
+    <tr><td><code>AuditEvent</code></td><td>append-only: <code>actor</code>, <code>action</code>, <code>entity</code>, <code>entity_id</code>, <code>before</code>, <code>after</code>, <code>request_id</code>, <code>at</code></td><td>One generic, tamper-evident trail across the whole system; the dispute-resolution artefact.</td></tr>
+    <tr><td><code>Announcement</code></td><td><code>title</code>, <code>body</code>, <code>scope</code>, <code>scope_id</code>, <code>severity</code>, <code>publish_at</code>, <code>expires_at</code>, <code>supersedes_booking_id?</code></td><td>Requirement 4, and the mechanism that closes the information gap that cost students an exam.</td></tr>
+    <tr><td><code>Report</code></td><td><code>booking_id</code> or <code>room_id</code>, <code>reporter</code>, <code>kind</code> (wrong-room / cancelled / outdated / clash), <code>status</code>, <code>thread</code></td><td>Requirement 5: students get a voice that cannot mutate official records.</td></tr>
+    <tr><td><code>Notification</code></td><td><code>user_id</code>, <code>channel</code>, <code>payload</code>, <code>status</code>, <code>sent_at</code></td><td>Outbox pattern: notices are queued transactionally and delivered after commit, so a mail failure never rolls back a booking.</td></tr>
+    <tr><td><code>SessionCredential</code></td><td><code>user_id</code>, <code>token_hash</code>, <code>expires_at</code></td><td>Minimal, self-contained auth without pulling in a third-party identity provider on day one.</td></tr>
+  </tbody>
+</table>
+
+<figure>
+<svg viewBox="0 0 900 470" role="img" aria-label="Entity relationship diagram of the core tables">
+  <rect width="900" height="470" fill="#fbfcfe"/>
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#8794a8"/>
+    </marker>
+  </defs>
+  <!-- Building -->
+  <rect x="16" y="20" width="150" height="64" rx="7" fill="#eaeefc" stroke="#8f9fe8"/>
+  <text x="26" y="40" class="keb">Building</text>
+  <text x="26" y="57" class="ket">id · name</text>
+  <text x="26" y="72" class="ket">has_lift · distance</text>
+  <!-- Floor -->
+  <rect x="16" y="120" width="150" height="58" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="26" y="140" class="keb">Floor</text>
+  <text x="26" y="157" class="ket">building_id · level</text>
+  <!-- Room -->
+  <rect x="16" y="214" width="176" height="112" rx="7" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="26" y="234" class="keb">Room</text>
+  <text x="26" y="251" class="ket">code · floor_id · type</text>
+  <text x="26" y="267" class="ket">capacity · exam_capacity</text>
+  <text x="26" y="283" class="ket">bookable · accessibility</text>
+  <text x="26" y="299" class="ket">zone · permitted_uses[]</text>
+  <text x="26" y="315" class="ket">unconfirmed</text>
+  <!-- Closure -->
+  <rect x="16" y="360" width="150" height="52" rx="7" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="26" y="380" class="keb">RoomClosure</text>
+  <text x="26" y="397" class="ket">interval · reason</text>
+  <!-- Booking -->
+  <rect x="330" y="200" width="212" height="140" rx="8" fill="#2f4bd6" stroke="#243a9e"/>
+  <text x="342" y="222" class="keb" style="fill:#fff">Booking</text>
+  <text x="342" y="240" class="ket" style="fill:#dfe4fb">id · room_id</text>
+  <text x="342" y="256" class="ket" style="fill:#dfe4fb">time_range tstzrange  ⛔EXCLUDE</text>
+  <text x="342" y="272" class="ket" style="fill:#dfe4fb">purpose · headcount</text>
+  <text x="342" y="288" class="ket" style="fill:#dfe4fb">section_id · requested_by</text>
+  <text x="342" y="304" class="ket" style="fill:#dfe4fb">status · version</text>
+  <text x="342" y="320" class="ket" style="fill:#dfe4fb">is_test · idempotency_key</text>
+  <!-- Section -->
+  <rect x="330" y="20" width="180" height="72" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="340" y="40" class="keb">Section</text>
+  <text x="340" y="57" class="ket">code e.g. CSE-3A</text>
+  <text x="340" y="73" class="ket">branch · year · strength</text>
+  <!-- TimetableSlot -->
+  <rect x="330" y="110" width="200" height="64" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="340" y="130" class="keb">TimetableSlot</text>
+  <text x="340" y="147" class="ket">course · section · room</text>
+  <text x="340" y="163" class="ket">day · period · validity</text>
+  <!-- Course -->
+  <rect x="580" y="20" width="150" height="64" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="590" y="40" class="keb">Course</text>
+  <text x="590" y="57" class="ket">code · branch · year</text>
+  <text x="590" y="72" class="ket">required_features[]</text>
+  <!-- User -->
+  <rect x="580" y="110" width="150" height="72" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="590" y="130" class="keb">User</text>
+  <text x="590" y="147" class="ket">email · role</text>
+  <text x="590" y="163" class="ket">section_id? · dept</text>
+  <!-- Report -->
+  <rect x="580" y="380" width="150" height="64" rx="7" fill="#fdeceb" stroke="#d99a95"/>
+  <text x="590" y="400" class="keb">Report</text>
+  <text x="590" y="417" class="ket">kind · status · thread</text>
+  <!-- Announcement -->
+  <rect x="760" y="200" width="128" height="78" rx="7" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="770" y="220" class="keb">Announcement</text>
+  <text x="770" y="237" class="ket">scope · severity</text>
+  <text x="770" y="253" class="ket">publish_at</text>
+  <text x="770" y="269" class="ket">supersedes_booking</text>
+  <!-- Audit -->
+  <rect x="330" y="378" width="200" height="66" rx="7" fill="#eef2f8" stroke="#aeb9c9"/>
+  <text x="340" y="398" class="keb">AuditEvent  (append-only)</text>
+  <text x="340" y="415" class="ket">actor · action · entity</text>
+  <text x="340" y="431" class="ket">before · after · request_id</text>
+  <!-- BookingEvent -->
+  <rect x="130" y="430" width="170" height="34" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="140" y="452" class="ket">BookingEvent (created/moved)</text>
+  <!-- Series -->
+  <rect x="760" y="300" width="128" height="52" rx="7" fill="#fff" stroke="#aeb9c9"/>
+  <text x="770" y="320" class="keb">BookingSeries</text>
+  <text x="770" y="337" class="ket">RRULE · parent</text>
+  <!-- edges -->
+  <line x1="91" y1="84" x2="91" y2="118" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="104" y1="178" x2="104" y2="212" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="192" y1="255" x2="328" y2="255" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="192" y1="380" x2="230" y2="380" stroke="#8794a8"/>
+  <line x1="230" y1="380" x2="230" y2="300" stroke="#8794a8"/>
+  <line x1="230" y1="300" x2="194" y2="300" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="420" y1="92" x2="420" y2="108" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="430" y1="174" x2="430" y2="198" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="510" y1="56" x2="578" y2="56" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="580" y1="146" x2="532" y2="146" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="655" y1="184" x2="655" y2="378" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="542" y1="290" x2="578" y2="300" stroke="#8794a8" marker-end="url(#ar)"/>
+  <line x1="542" y1="240" x2="758" y2="240" stroke="#8794a8" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+  <line x1="420" y1="376" x2="420" y2="342" stroke="#8794a8" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+  <text x="600" y="290" class="kec" style="font-size:10px">(comments)</text>
+  <text x="600" y="360" class="kec" style="font-size:10px">reporter at faculty cabin</text>
+</svg>
+<figcaption>Figure 3 — Core schema. The bold box is the only place where time is allowed to overlap, and the database forbids it.</figcaption>
+</figure>
+
+<h3>4.2 The time model — get this right once and everything else gets easier</h3>
+
+<p>Almost every bug in a booking system is a time bug. Four decisions, made once, remove the whole class:</p>
+
+<ol>
+  <li><strong>Store instants, not wall-clock strings.</strong> Use <code>timestamptz</code> backed by <code>tstzrange</code>. The campus lives in one timezone, but IST is UTC+05:30 — an offset that breaks any code assuming whole hours. Let Postgres do the conversion and never do date arithmetic in JavaScript.</li>
+  <li><strong>Half-open intervals only: <code>[start, end)</code>.</strong> A booking ending at 11:00 and one starting at 11:00 do not conflict. Getting this wrong produces the maddening "back-to-back bookings clash" bug, and it is a one-character fix if you decide on day one.</li>
+  <li><strong>Snap to 5 minutes on input; compare exactly on overlap.</strong> The grid gives neat UX; the interval gives correctness. Do not try to force every booking onto the period grid — extra classes and practicals start at odd times, and the statement explicitly asks for arbitrary durations.</li>
+  <li><strong>Never delete.</strong> Cancellations are <code>status='cancelled'</code> with a reason and an actor. The <code>tstzrange</code> exclusion constraint is written to apply only to <code>status='confirmed'</code>, so a cancelled slot is immediately reusable while history stays intact.</li>
+</ol>
+
+<pre><code>-- The single most important line of SQL in the project.
+-- Requires: CREATE EXTENSION btree_gist;
+ALTER TABLE "Booking"
+  ADD CONSTRAINT booking_no_overlap
+  EXCLUDE USING gist (
+    room_id WITH =,
+    tstzrange(start_at, end_at, '[)') WITH &amp;&amp;
+  ) WHERE (status IN ('CONFIRMED','PENDING_APPROVAL'));</code></pre>
+
+<div class="box good">
+  <span class="t">Why this is the highest-leverage decision in the build</span>
+  <p>Application-level conflict checks are a race condition: two faculty members clicking "Book" in the same second both pass the check, and both rows are written. A judge <em>will</em> ask "what if two people book at once?" — and "the database refuses the second one" is a far better answer than "we use a transaction and hope". A PostgreSQL exclusion constraint makes overlapping confirmed bookings for the same room literally unrepresentable at the storage layer. It is ~10 lines of SQL, it needs <code>btree_gist</code>, it works on Neon/Supabase/RDS, and it removes an entire category of failure. Catch the resulting Postgres error code <code>23P01</code> and translate it into your friendly <code>409</code> with alternatives.</p>
+</div>
+
+<h3>4.3 Status machine for a booking</h3>
+
+<figure>
+<svg viewBox="0 0 900 170" role="img" aria-label="Booking status state machine">
+  <rect width="900" height="170" fill="#fbfcfe"/>
+  <defs><marker id="ar2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#65707f"/></marker></defs>
+  <rect x="20" y="60" width="120" height="44" rx="22" fill="#fff" stroke="#aeb9c9"/><text x="80" y="87" class="keb" text-anchor="middle">DRAFT</text>
+  <rect x="200" y="60" width="170" height="44" rx="22" fill="#fdf4e3" stroke="#d8b273"/><text x="285" y="80" class="keb" text-anchor="middle">PENDING_APPROVAL</text><text x="285" y="95" class="kec" text-anchor="middle">(Seminar Hall, Library, events)</text>
+  <rect x="430" y="60" width="140" height="44" rx="22" fill="#e6f6ef" stroke="#7fbfa4"/><text x="500" y="87" class="keb" text-anchor="middle">CONFIRMED</text>
+  <rect x="630" y="20" width="130" height="40" rx="20" fill="#fff" stroke="#aeb9c9"/><text x="695" y="45" class="keb" text-anchor="middle">COMPLETED</text>
+  <rect x="630" y="104" width="130" height="40" rx="20" fill="#fdeceb" stroke="#d99a95"/><text x="695" y="129" class="keb" text-anchor="middle">CANCELLED</text>
+  <rect x="790" y="62" width="90" height="40" rx="20" fill="#fdeceb" stroke="#d99a95"/><text x="835" y="87" class="keb" text-anchor="middle">REJECTED</text>
+  <line x1="140" y1="82" x2="196" y2="82" stroke="#65707f" marker-end="url(#ar2)"/>
+  <line x1="370" y1="82" x2="426" y2="82" stroke="#65707f" marker-end="url(#ar2)"/>
+  <line x1="570" y1="75" x2="626" y2="48" stroke="#65707f" marker-end="url(#ar2)"/>
+  <line x1="570" y1="90" x2="626" y2="118" stroke="#65707f" marker-end="url(#ar2)"/>
+  <line x1="370" y1="70" x2="786" y2="78" stroke="#65707f" stroke-dasharray="4 3" marker-end="url(#ar2)"/>
+  <text x="150" y="74" class="kec" style="font-size:10px">submit</text>
+  <text x="380" y="74" class="kec" style="font-size:10px">approve</text>
+  <text x="580" y="52" class="kec" style="font-size:10px">time passes</text>
+  <text x="580" y="126" class="kec" style="font-size:10px">cancel (any actor)</text>
+  <text x="480" y="66" class="kec" style="font-size:10px">reject</text>
+  <text x="20" y="140" class="kec" style="font-size:10.5px">Every arrow writes an AuditEvent + a BookingEvent in the same transaction. Nothing is ever hard-deleted; only CONFIRMED/PENDING rows occupy the exclusion constraint.</text>
+</svg>
+<figcaption>Figure 4 — Booking lifecycle. Two states, one approval gate, no deletion.</figcaption>
+</figure>
+
+<h2 id="s5"><span class="sec-num">Section 5</span>Algorithms: availability, conflict, alternatives</h2>
+
+<p>The statement asks for "intelligent assistance" and "scheduling algorithms". Resist the urge to reach for a heavyweight optimiser. The high-value work here is a <em>correct</em> availability query, a <em>scored</em> alternative generator and a small, honest scheduling heuristic — all of which fit in a few hundred lines of pure TypeScript and are trivially unit-testable. That is both the efficient and the convenient path.</p>
+
+<h3>5.1 Availability search</h3>
+
+<p>Availability is not a boolean on a room; it is the complement of the union of occupied intervals within a window. Two equivalent implementations — pick one and don't build both:</p>
+
+<pre><code>-- Option A (recommended): anti-join over intervals. One round trip, uses the GiST index.
+WITH occupied AS (
+  SELECT room_id FROM "Booking"
+   WHERE status IN ('CONFIRMED','PENDING_APPROVAL')
+     AND tstzrange(start_at, end_at, '[)') &amp;&amp; tstzrange($1::timestamptz, $2::timestamptz, '[)')
+  UNION
+  SELECT room_id FROM "RoomClosure"
+   WHERE tstzrange(start_at, end_at, '[)') &amp;&amp; tstzrange($1::timestamptz, $2::timestamptz, '[)')
+  UNION
+  SELECT room_id FROM "TimetableSlot"          -- official recurring classes
+   WHERE day = $3 AND period &amp;&amp; $4::int[]     -- overlap of period sets
+)
+SELECT r.*, f.level, b.name
+  FROM "Room" r
+  JOIN "Floor" f ON f.id = r.floor_id
+  JOIN "Building" b ON b.id = f.building_id
+ WHERE r.bookable
+   AND r.capacity &gt;= $5
+   AND r.type = ANY($6::text[])               -- permitted by purpose
+   AND ($7::bool IS NOT TRUE OR r.accessibility = 'step_free')
+   AND r.id NOT IN (SELECT room_id FROM occupied)
+ ORDER BY (b.id = 'IET') DESC, r.capacity ASC;  -- prefer IET, then the tightest fit</code></pre>
+
+<p>Three details that separate a working query from a demo query: (a) <code>TimetableSlot</code> must be included, or the "free" room is the one where a class is already running — the exact bug the project is meant to fix; (b) <code>RoomClosure</code> must be included, or maintenance days vanish; (c) ordering by "tightest fit" — <code>capacity ASC</code> within capacity ≥ headcount — matters because it preserves the big rooms for the big events — a bin-packing instinct that costs one line and makes the whole system feel considered.</p>
+
+<h3>5.2 The atomic booking transaction</h3>
+
+<pre><code>BEGIN;
+  -- 1. authz + policy (purpose permitted for this room? approval needed?)
+  -- 2. capacity: room.capacity &gt;= headcount  (or exam_capacity for purpose=EXAM)
+  -- 3. lead time / horizon checks against settings
+  -- 4. INSERT  → the EXCLUDE constraint is the real conflict check
+  INSERT INTO "Booking" (id, room_id, start_at, end_at, purpose, headcount,
+                         section_id, requested_by, status, is_test, idempotency_key)
+  VALUES (...);
+  -- 5. audit + event + notification outbox, same transaction
+  INSERT INTO "AuditEvent" ...;  INSERT INTO "BookingEvent" ...;  INSERT INTO "Notification" ...;
+COMMIT;
+-- On SQLSTATE 23P01  →  409 + ranked alternatives (never a dead end)
+-- On idempotency_key conflict → return the original booking (200, not 201)</code></pre>
+
+<p>Wrap it in a retry-once policy for serialisation failures, and make the whole handler idempotent via the <code>idempotency_key</code> the client sends. Judges double-click. Without idempotency, a double-click looks like a bug; with it, it looks like engineering.</p>
+
+<h3>5.3 Conflict detection result — what the user actually sees</h3>
+
+<p>A conflict is never just an error. The response must be a useful object, because the faculty member's real question is "then where do I go?"</p>
+
+<pre><code>HTTP/1.1 409 Conflict
+{
+  "code": "ROOM_ALREADY_BOOKED",
+  "message": "IET19 is booked 10:00–11:00 for a practical session (CSE-2A).",
+  "conflict": { "room": "IET19", "start": "…10:00", "end": "…11:00",
+                "purpose": "PRACTICAL", "section": "CSE-2A" },
+  "alternatives": [
+    { "room": "IET18", "start": "…10:00", "end": "…11:00", "score": 94,
+      "reasons": ["adjacent room, same floor", "seats 75 ≥ 72", "no travel for students"] },
+    { "room": "IET24", "start": "…10:00", "end": "…11:00", "score": 81,
+      "reasons": ["one floor up", "+45 s stair climb"] },
+    { "room": "LH08", "start": "…10:20", "end": "…11:20", "score": 63,
+      "reasons": ["Deeksha Bhawan, 100 m away", "shifted start by 20 min to fit the free window"] }
+  ],
+  "audit": { "requestId": "req_8f21" }
+}</code></pre>
+
+<p>Note the third alternative: it is <em>not</em> the requested time. Giving the engine licence to slide the window (bounded, say, by ±30 minutes) is what turns "no rooms available" into "here are three ways forward", and it is cheap to implement — just probe a few shifted windows.</p>
+
+<h3>5.4 Ranking alternatives — the scoring function</h3>
+
+<p>This function is the project's "intelligence", and it belongs in the deterministic code path, not in the LLM (the LLM may <em>explain</em> it, never compute it). Every term is normalised to 0–1 and then weighted. Start with these weights, then tune them live during the demo — having visible weights is itself a strong signal of engineering maturity.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:23%">Term</th><th style="width:8%">Weight</th><th style="width:38%">Definition</th><th style="width:31%">Why it is in the model</th></tr></thead>
+  <tbody>
+    <tr><td><code>capacityFit</code></td><td>0.22</td><td><code>1 − (capacity − headcount)/capacity</code>, clamped; penalise &gt;40% slack gently</td><td>Tightest fit preserves big rooms; but do not squeeze a 30-person tutorial into a 45-seat room when a 200-seat hall is the only alternative</td></tr>
+    <tr><td><code>sameBuilding</code></td><td>0.20</td><td>1 if same building as the requester's previous/next activity, else 0</td><td>Inter-building moves are the slowest journey on this campus (§2.5)</td></tr>
+    <tr><td><code>sameFloor</code></td><td>0.12</td><td>1 if same floor, 0.5 if one floor away, 0 otherwise</td><td>The stair core is the bottleneck; floor changes cost minutes and crowding</td></tr>
+    <tr><td><code>purposeFit</code></td><td>0.12</td><td>1 if the room type matches the purpose (LAB for practical, SEMINAR for event, CLASS for lecture), 0.6 if allowed-but-suboptimal</td><td>Booking an event into a lab wastes equipment and annoys the lab in-charge</td></tr>
+    <tr><td><code>featureMatch</code></td><td>0.10</td><td>Fraction of the course's <code>required_features</code> present</td><td>A practical without lab benches is not a practical</td></tr>
+    <tr><td><code>disruption</code></td><td>0.08</td><td>Penalty for rooms adjacent to the washroom/water core, or hosting an exam next to a noisy zone</td><td>Encodes §2.3 without becoming a hard rule</td></tr>
+    <tr><td><code>timeShift</code></td><td>0.08</td><td><code>1 − |shiftMinutes| / maxShift</code></td><td>A 20-minute shift beats a different building, usually</td></tr>
+    <tr><td><code>accessibility</code></td><td>0.05</td><td>1 if step-free when required, else hard-reject (not a score)</td><td>Keep it binary as a constraint; the weight sorts accessible rooms first when not required</td></tr>
+    <tr><td><code>fairness</code></td><td>0.03</td><td><code>1 − room.utilisationThisWeek</code>, smoothed</td><td>Stops the engine from always choosing IET20 and leaving the rest cold</td></tr>
+  </tbody>
+</table>
+
+<pre><code>function scoreRoom(candidate, request, context): number {
+  // 1. HARD CONSTRAINTS — any failure means the room is not a candidate at all.
+  if (!room.bookable) return REJECT;
+  if (room.capacity &lt; requiredCapacity(request)) return REJECT;
+  if (!room.permittedUses.includes(request.purpose)) return REJECT;
+  if (request.accessibleOnly &amp;&amp; room.accessibility !== 'step_free') return REJECT;
+  if (overlapsAnyBooking(candidate.interval, room.id)) return REJECT;   // re-validated here, always
+
+  // 2. SOFT CONSTRAINTS — weighted sum, normalised to 0..100.
+  const s =
+      0.22 * capacityFit(room, request)
+    + 0.20 * sameBuilding(room, context.anchorRoom)
+    + 0.12 * sameFloor(room, context.anchorRoom)
+    + 0.12 * purposeFit(room.type, request.purpose)
+    + 0.10 * featureMatch(room, request.requiredFeatures)
+    + 0.08 * (1 - disruptionPenalty(room, request.purpose))
+    + 0.08 * (1 - Math.abs(candidate.shiftMinutes) / MAX_SHIFT)
+    + 0.05 * (request.accessibleOnly ? 1 : room.accessibility === 'step_free' ? 1 : 0.7)
+    + 0.03 * (1 - utilisation(room));
+
+  return Math.round(s * 100);
+}</code></pre>
+
+<div class="box warn">
+  <span class="t">Two honesty rules for the recommendation engine</span>
+  <p><strong>(1) Re-validate at display time.</strong> The statement explicitly says recommendations must be "validated against actual booking records". A room that was free when the list was computed may be booked by the time the faculty member clicks. So the <code>POST /api/bookings</code> handler re-runs the constraint check, and the UI refreshes the list on a short stale-time. Recommendation is advisory; the exclusion constraint is authoritative.</p>
+  <p><strong>(2) Explain every score.</strong> Return the top two or three contributing reasons as text ("adjacent room, same floor"). A number without a reason is not intelligent, it is just opaque — and judges ask "why did it pick that one?"</p>
+</div>
+
+<h3>5.5 Timetable-aware allocation (the optional but impressive part)</h3>
+
+<p>When a room must be assigned to a whole section's weekly schedule, the objective is <em>least disruption</em>, not maximum packing: keep classes where they already are, and move as little as possible. A greedy pass with a local-search polish gets within a few percent of optimal on 32 sections × 8 periods, in milliseconds — do not import a MILP solver for this.</p>
+
+<ol>
+  <li><strong>Rank requests by difficulty</strong> (largest section first, most constrained purpose first, lab-feature requirements first) — the standard "most constrained variable" heuristic. This alone removes most dead ends.</li>
+  <li><strong>Greedy assignment</strong> with the §5.4 scorer; when a slot is full, allow the <em>swap</em> move: displace a lower-priority booking into another qualifying room if one exists, and count the displacement as cost.</li>
+  <li><strong>Local search polish:</strong> repeat N times — pick a conflicting pair, try the four standard repairs (move A, move B, swap A↔B, change period), keep the change if total cost falls. Cap at ~50 ms and report the cost before/after.</li>
+  <li><strong>Report the cost decomposition</strong> in the UI: "12 classes kept, 3 moved, 1 cross-building move +10 min". Show the before/after total so the improvement is visible rather than asserted.</li>
+</ol>
+
+<p>If — and only if — the team has a Python member with spare hours, an OR-Tools CP-SAT model over the same data makes a strong "advanced" appendix (and justifies the elective C++/GPU mention in the statement). Frame it as a <em>comparison</em>: greedy+local-search vs CP-SAT on the same seed, with solve time and cost. That is a five-minute demo segment with real content, but it is a phase-3 item, never a blocker.</p>
+
+<h3>5.6 Performance budget</h3>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:34%">Operation</th><th style="width:18%">Target (p95)</th><th style="width:48%">How it is achieved</th></tr></thead>
+  <tbody>
+    <tr><td>Availability query (one day, all buildings)</td><td>&lt; 80 ms</td><td>GiST index on the range, composite index on <code>(room_id, start_at)</code>, no N+1</td></tr>
+    <tr><td>Booking creation (happy path)</td><td>&lt; 150 ms</td><td>Single transaction, three inserts, no external call on the critical path</td></tr>
+    <tr><td>Alternatives generation (12 candidate rooms × 5 shifted windows)</td><td>&lt; 120 ms</td><td>One batched query for all candidates, scoring in memory</td></tr>
+    <tr><td>AI natural-language search (end to end)</td><td>&lt; 2.5 s</td><td>Streamed response, one tool call, cached system prompt; show a skeleton meanwhile</td></tr>
+    <tr><td>Section schedule page</td><td>&lt; 200 ms</td><td>Server component + <code>revalidateTag('schedule:'+section)</code> on publish</td></tr>
+  </tbody>
+</table>
+
+<p class="cap">Load-test with k6 at 200 virtual users hammering the booking endpoint with overlapping requests — that test doubles as proof of the race-condition claim in §4.2, and its output is a screenshot worth putting in the deck.</p>
+<h2 id="s6"><span class="sec-num">Section 6</span>The AI layer, done safely</h2>
+
+<h3>6.1 The architectural rule: the model proposes, the database decides</h3>
+
+<p>The single most common way a student AI project loses credibility is letting the language model invent facts — a room that does not exist, a slot that is already taken, a capacity it remembers from somewhere. For a system whose entire purpose is <em>correct information</em>, that is fatal. So the boundary is drawn once, in one sentence:</p>
+
+<div class="box good">
+  <span class="t">The rule</span>
+  <p><strong>The LLM never computes availability, never writes to the database, and never produces a number the UI displays as fact.</strong> It does exactly two things: it translates messy human language into a structured query (function-calling / tool use), and it renders a result that the deterministic engine produced into a friendly sentence. Everything the AI says about rooms originates from a database row returned by your own code, with provenance attached.</p>
+</div>
+
+<figure>
+<svg viewBox="0 0 900 250" role="img" aria-label="AI layer flow: language to typed intent to deterministic engine to database to explanation">
+  <rect width="900" height="250" fill="#fbfcfe"/>
+  <defs><marker id="ar3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#65707f"/></marker></defs>
+  <rect x="14" y="70" width="150" height="96" rx="8" fill="#fff" stroke="#aeb9c9"/>
+  <text x="89" y="94" class="keb" text-anchor="middle">Faculty types</text>
+  <text x="89" y="112" class="kec" text-anchor="middle" style="font-size:10px">"need a room for 72</text>
+  <text x="89" y="126" class="kec" text-anchor="middle" style="font-size:10px">students tomorrow</text>
+  <text x="89" y="140" class="kec" text-anchor="middle" style="font-size:10px">11ish, must have</text>
+  <text x="89" y="154" class="kec" text-anchor="middle" style="font-size:10px">projector"</text>
+  <rect x="188" y="70" width="150" height="96" rx="8" fill="#eaeefc" stroke="#8f9fe8"/>
+  <text x="263" y="94" class="keb" text-anchor="middle">LLM (tool call)</text>
+  <text x="263" y="112" class="kec" text-anchor="middle" style="font-size:10px">function: search_rooms</text>
+  <text x="263" y="126" class="kec" text-anchor="middle" style="font-size:10px">min_capacity: 72</text>
+  <text x="263" y="140" class="kec" text-anchor="middle" style="font-size:10px">date: 2026-11-07</text>
+  <text x="263" y="154" class="kec" text-anchor="middle" style="font-size:10px">window: 10:30–12:30</text>
+  <rect x="362" y="70" width="170" height="96" rx="8" fill="#fff" stroke="#aeb9c9"/>
+  <text x="447" y="94" class="keb" text-anchor="middle">Deterministic engine</text>
+  <text x="447" y="112" class="kec" text-anchor="middle" style="font-size:10px">validate schema (zod)</text>
+  <text x="447" y="126" class="kec" text-anchor="middle" style="font-size:10px">availability query</text>
+  <text x="447" y="140" class="kec" text-anchor="middle" style="font-size:10px">hard constraints</text>
+  <text x="447" y="154" class="kec" text-anchor="middle" style="font-size:10px">scoring §5.4</text>
+  <rect x="556" y="70" width="150" height="96" rx="8" fill="#2f4bd6" stroke="#243a9e"/>
+  <text x="631" y="94" class="keb" text-anchor="middle" style="fill:#fff">PostgreSQL</text>
+  <text x="631" y="112" class="kec" text-anchor="middle" style="font-size:10px; fill:#dfe4fb">Bookings · Timetable</text>
+  <text x="631" y="126" class="kec" text-anchor="middle" style="font-size:10px; fill:#dfe4fb">Closures · Audit</text>
+  <text x="631" y="146" class="kec" text-anchor="middle" style="font-size:10px; fill:#dfe4fb">source of truth</text>
+  <rect x="730" y="70" width="156" height="96" rx="8" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="808" y="94" class="keb" text-anchor="middle">Grounded answer</text>
+  <text x="808" y="112" class="kec" text-anchor="middle" style="font-size:10px">"IET19 is free 10:30–12:30</text>
+  <text x="808" y="126" class="kec" text-anchor="middle" style="font-size:10px">(75 seats, same floor as</text>
+  <text x="808" y="140" class="kec" text-anchor="middle" style="font-size:10px">your 09:55 class). Book?"</text>
+  <text x="808" y="156" class="kec" text-anchor="middle" style="font-size:9.5px">every fact = a DB row</text>
+  <line x1="164" y1="118" x2="186" y2="118" stroke="#65707f" marker-end="url(#ar3)"/>
+  <line x1="338" y1="118" x2="360" y2="118" stroke="#65707f" marker-end="url(#ar3)"/>
+  <line x1="532" y1="118" x2="554" y2="118" stroke="#65707f" marker-end="url(#ar3)"/>
+  <line x1="706" y1="118" x2="728" y2="118" stroke="#65707f" marker-end="url(#ar3)"/>
+  <line x1="447" y1="70" x2="447" y2="40" stroke="#b3372f" stroke-dasharray="4 3"/>
+  <text x="447" y="32" class="kec" text-anchor="middle" style="font-size:10px; fill:#b3372f">✕ no write path from the model — booking requires an explicit user action</text>
+  <text x="14" y="210" class="kec" style="font-size:10.5px">The model's output is a <tspan style="font-weight:700">typed intent</tspan> (validated by zod) or an <tspan style="font-weight:700">explanation of engine output</tspan>. It is never a source of truth, and it never calls a mutating endpoint.</text>
+  <text x="14" y="228" class="kec" style="font-size:10.5px">Fallback: if the provider is down or the key is missing, the same route serves a structured form-based search — the feature degrades, it never breaks.</text>
+</svg>
+<figcaption>Figure 5 — AI integration with a one-way data flow. Tool calls read; user actions write.</figcaption>
+</figure>
+
+<h3>6.2 The four AI features worth building (and their guardrails)</h3>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:19%">Feature</th><th style="width:27%">Implementation</th><th style="width:27%">Guardrails</th><th style="width:27%">Demo value</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Natural-language room search</strong><br><span class="small">"find me a lab with 70 seats tomorrow after lunch"</span></td><td>Function calling into <code>search_rooms(min_capacity, date, window, purpose, features)</code>; the model fills a typed struct, your code does the rest</td><td>Params validated by zod with sane ranges; unresolvable fields (date, headcount) cause a clarifying question, never a guess; unknown rooms are rejected before querying</td><td>Highest — this is the moment the demo feels modern</td></tr>
+    <tr><td><strong>Recommendation explainer</strong></td><td>The engine produces the ranked list and scores; the model writes one sentence per alternative using only the returned reasons</td><td>Prompt restricts it to the supplied JSON; no new room codes may appear (assert by checking the response against the allowed set)</td><td>High — turns opaque numbers into advice</td></tr>
+    <tr><td><strong>Notice drafting</strong></td><td>Faculty types "cancel the 3rd period practical"; the model drafts a formal notice from the booking record</td><td>Draft only; the faculty member must edit/confirm; the published notice is a plain DB row with version history</td><td>Medium-high — shows the announcements flow end to end</td></tr>
+    <tr><td><strong>Duplicate-report triage</strong></td><td>Embedding or simple keyword similarity to cluster student reports ("30 students say the exam room changed")</td><td>Clustering only surfaces items; an admin makes every decision; no automated cancellation ever</td><td>Medium — a nice "AI, not gimmick" touch</td></tr>
+  </tbody>
+</table>
+
+<h3>6.3 Model and cost strategy</h3>
+
+<p>Use a hosted API with tool calling and a <strong>provider-agnostic adapter</strong> behind one interface (<code>llm.complete()</code> / <code>llm.tool()</code>). This costs ~40 lines and buys three things that matter on a hackathon timeline: you can switch providers in a minute if a key is rate-limited, the whole app still runs with the AI disabled, and you can state honestly what each call costs.</p>
+
+<ul>
+  <li><strong>Small, cheap, fast model for intent extraction</strong> (structured output) and a slightly larger one only for notice drafting. Cache frequently used prompt prefixes; keep the schema in the system prompt, not in the user turn.</li>
+  <li><strong>Timeout at 8 s and fall back</strong> to the deterministic UI with a quiet "smart search unavailable" hint. A judge must never see a spinner of death during a demo.</li>
+  <li><strong>Rate-limit per user</strong> (e.g. 20 AI calls/hour) and log every call as an <code>AIInteraction</code> row: prompt hash, tokens, latency, tool args, outcome. This log is both your cost dashboard and your audit trail for the "AI recommended X" question.</li>
+  <li><strong>Prompt-injection hygiene:</strong> user text never becomes system instructions; room data is passed as data; the tool layer refuses any argument it would not accept from a form.</li>
+</ul>
+
+<div class="box">
+  <span class="t">A line worth putting in the README</span>
+  <p>"Every recommendation is recomputed from the booking table at request time; the language model has read-only access and no tool that can modify a booking. The system therefore cannot hallucinate a free room — it can only fail to find one."</p>
+</div>
+
+<h2 id="s7"><span class="sec-num">Section 7</span>Stack decision &amp; system architecture</h2>
+
+<h3>7.1 The recommended stack, and the reasoning</h3>
+
+<p>The statement lists React/Next.js, Python, PostgreSQL and "AI APIs" as <em>suggestions</em>. The most efficient choice for a small team under time pressure is a <strong>single-language, single-deployment</strong> stack: fewer moving parts, one set of types from database to UI, and one free deploy target.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:17%">Layer</th><th style="width:26%">Choice</th><th style="width:57%">Why this one (the argument you'll repeat in the viva)</th></tr></thead>
+  <tbody>
+    <tr><td>Framework</td><td><strong>Next.js 15 (App Router) + TypeScript</strong></td><td>One codebase serves the UI and the API (route handlers), so there is no second service to deploy, no CORS, no duplicated validation. Server Components keep schedule pages fast and let the DB be queried on the server. Deploys free on Vercel in ~40 s.</td></tr>
+    <tr><td>Database</td><td><strong>PostgreSQL 16</strong> (Neon or Supabase free tier)</td><td>The exclusion constraint (§4.2) is the reason. Range types, GiST indexes, <code>tstzrange</code> and <code>btree_gist</code> are all native. MySQL cannot express overlap-prevention declaratively; MongoDB would push the check into application code, reintroducing the race.</td></tr>
+    <tr><td>ORM</td><td><strong>Drizzle</strong> (Prisma acceptable)</td><td>Thin, SQL-first, and it can hold raw SQL for the exclusion constraint without a fight. Prisma is friendlier for beginners but needs a migration file for the constraint anyway — either way, hand-write that one migration.</td></tr>
+    <tr><td>UI</td><td><strong>Tailwind + shadcn/ui</strong>, custom calendar grid</td><td>Accessible components for free; a timeline/grid is ~150 lines and far better than wrestling a heavy calendar library into a campus timetable.</td></tr>
+    <tr><td>Auth</td><td><strong>Email + password</strong> (Argon2/bcrypt) with httpOnly cookie sessions; optional Google OAuth if the university domain is available</td><td>Role-based access is the requirement, not fancy identity. Seeded demo accounts on the login page make judging frictionless. Skip SSO — it will eat a day.</td></tr>
+    <tr><td>Validation</td><td><strong>zod</strong> schemas shared by client, route handler and AI tool definitions</td><td>One schema used in three places is the single best defence against the "AI sent a weird argument" and "form sent a string date" bugs.</td></tr>
+    <tr><td>AI</td><td>Hosted LLM API via a provider-agnostic adapter</td><td>No GPU, no local weights, no cold starts — and the adapter makes the AI optional at runtime.</td></tr>
+    <tr><td>Jobs / mail</td><td><strong>Postgres outbox + Vercel Cron</strong> (or a single Supabase cron)</td><td>Notifications must not block booking creation. A 20-line outbox dispatcher is more reliable than calling a mail API mid-transaction.</td></tr>
+    <tr><td>Testing</td><td><strong>Vitest</strong> (unit) + <strong>Playwright</strong> (E2E) + <strong>k6</strong> (load)</td><td>Vitest runs in ms for the scoring/date logic where the real bugs live; Playwright proves the three user journeys; k6 proves the race claim.</td></tr>
+    <tr><td>DevOps</td><td><strong>GitHub Actions → Vercel</strong>; Docker Compose for local Postgres</td><td>CI on every PR, preview deployment per branch, one-command local environment. This directly scores the "DevOps" half of the event title.</td></tr>
+  </tbody>
+</table>
+
+<div class="grid2">
+  <div class="card">
+    <h4>The Python alternative — when it's the right call</h4>
+    <p class="small" style="margin-bottom:0">Choose <strong>FastAPI + React (Vite) + PostgreSQL + SQLAlchemy</strong> if the team already writes Python comfortably, or if you genuinely plan the OR-Tools CP-SAT scheduling comparison (§5.5) — then the optimiser lives in the same language as the API and you avoid a second service. The cost is real: two deployments, CORS, duplicated types, and roughly a day of extra plumbing. Do not pick it for the AI alone; every serious LLM provider has a first-class JS SDK.</p>
+  </div>
+  <div class="card">
+    <h4>What to explicitly <em>not</em> build</h4>
+    <p class="small" style="margin-bottom:0">No microservices. No Kubernetes. No Kafka/Redis queue. No mobile app. No custom ML model. No SSO integration. No i18n. Each of these consumes days and adds zero to the rubric. The statement's own closing line is the permission slip: <em>"Prioritise a reliable, functional solution over unnecessary complexity."</em> Write that sentence on the whiteboard.</p>
+  </div>
+</div>
+
+<h3>7.2 System architecture</h3>
+
+<figure>
+<svg viewBox="0 0 900 420" role="img" aria-label="System architecture diagram">
+  <rect width="900" height="420" fill="#fbfcfe"/>
+  <defs><marker id="ar4" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#65707f"/></marker></defs>
+  <!-- browser -->
+  <rect x="16" y="20" width="868" height="72" rx="9" fill="#fff" stroke="#cfd6e0"/>
+  <text x="30" y="42" class="keb">Client — browser (mobile-first; the student experience is a phone)</text>
+  <rect x="30" y="52" width="150" height="28" rx="5" fill="#eef2f8" stroke="#cfd6e0"/><text x="105" y="70" class="kec" text-anchor="middle" style="font-size:10px">Student: schedule + notices</text>
+  <rect x="190" y="52" width="170" height="28" rx="5" fill="#eef2f8" stroke="#cfd6e0"/><text x="275" y="70" class="kec" text-anchor="middle" style="font-size:10px">Faculty: search + booking</text>
+  <rect x="370" y="52" width="150" height="28" rx="5" fill="#eef2f8" stroke="#cfd6e0"/><text x="445" y="70" class="kec" text-anchor="middle" style="font-size:10px">Admin: rooms + approvals</text>
+  <rect x="530" y="52" width="150" height="28" rx="5" fill="#eef2f8" stroke="#cfd6e0"/><text x="605" y="70" class="kec" text-anchor="middle" style="font-size:10px">Chat: "smart search"</text>
+  <rect x="690" y="52" width="180" height="28" rx="5" fill="#eef2f8" stroke="#cfd6e0"/><text x="780" y="70" class="kec" text-anchor="middle" style="font-size:10px">Floor-plan room picker</text>
+
+  <!-- app layer -->
+  <rect x="16" y="112" width="868" height="126" rx="9" fill="#eaeefc" stroke="#8f9fe8"/>
+  <text x="30" y="134" class="keb" style="fill:#26399f">Next.js application (one deployment) — every route goes through the policy layer</text>
+  <rect x="30" y="144" width="122" height="40" rx="5" fill="#fff" stroke="#8f9fe8"/><text x="91" y="162" class="kec" text-anchor="middle" style="font-size:10px">auth + can()</text><text x="91" y="176" class="kec" text-anchor="middle" style="font-size:9.5px">policy module</text>
+  <rect x="162" y="144" width="122" height="40" rx="5" fill="#fff" stroke="#8f9fe8"/><text x="223" y="162" class="kec" text-anchor="middle" style="font-size:10px">availability</text><text x="223" y="176" class="kec" text-anchor="middle" style="font-size:9.5px">interval query</text>
+  <rect x="294" y="144" width="122" height="40" rx="5" fill="#fff" stroke="#8f9fe8"/><text x="355" y="162" class="kec" text-anchor="middle" style="font-size:10px">booking service</text><text x="355" y="176" class="kec" text-anchor="middle" style="font-size:9.5px">transaction + audit</text>
+  <rect x="426" y="144" width="122" height="40" rx="5" fill="#fff" stroke="#8f9fe8"/><text x="487" y="162" class="kec" text-anchor="middle" style="font-size:10px">scoring engine</text><text x="487" y="176" class="kec" text-anchor="middle" style="font-size:9.5px">alternatives §5.4</text>
+  <rect x="558" y="144" width="122" height="40" rx="5" fill="#fff" stroke="#8f9fe8"/><text x="619" y="162" class="kec" text-anchor="middle" style="font-size:10px">notices</text><text x="619" y="176" class="kec" text-anchor="middle" style="font-size:9.5px">publish + outbox</text>
+  <rect x="690" y="144" width="180" height="40" rx="5" fill="#fff" stroke="#8f9fe8"/><text x="780" y="162" class="kec" text-anchor="middle" style="font-size:10px">AI adapter (read-only tools)</text><text x="780" y="176" class="kec" text-anchor="middle" style="font-size:9.5px">zod-validated intents</text>
+  <rect x="30" y="192" width="400" height="34" rx="5" fill="#fff" stroke="#8f9fe8"/>
+  <text x="230" y="214" class="kec" text-anchor="middle" style="font-size:10px">seed + ingest scripts (students, branches, registry) · idempotent · dry-run capable</text>
+  <rect x="442" y="192" width="428" height="34" rx="5" fill="#fff" stroke="#8f9fe8"/>
+  <text x="656" y="214" class="kec" text-anchor="middle" style="font-size:10px">audit writer — same transaction as every mutation, append-only</text>
+
+  <!-- data -->
+  <rect x="16" y="262" width="560" height="120" rx="9" fill="#2f4bd6" stroke="#243a9e"/>
+  <text x="30" y="284" class="keb" style="fill:#fff">PostgreSQL (Neon / Supabase)</text>
+  <text x="30" y="303" class="ket" style="fill:#dfe4fb">Room · Floor · Building · RoomClosure · Section · Course</text>
+  <text x="30" y="321" class="ket" style="fill:#dfe4fb">TimetableSlot · Booking (tstzrange + EXCLUDE) · BookingSeries</text>
+  <text x="30" y="339" class="ket" style="fill:#dfe4fb">Announcement · Report · BookingEvent · AuditEvent · Notification</text>
+  <text x="30" y="362" class="ket" style="fill:#aebcf7">⛔ EXCLUDE USING gist (room_id, tstzrange) — overlaps are unrepresentable</text>
+  <!-- external -->
+  <rect x="606" y="262" width="130" height="52" rx="8" fill="#e6f6ef" stroke="#7fbfa4"/>
+  <text x="671" y="283" class="keb" text-anchor="middle">LLM API</text>
+  <text x="671" y="300" class="kec" text-anchor="middle" style="font-size:9.5px">tool calling</text>
+  <rect x="750" y="262" width="134" height="52" rx="8" fill="#fdf4e3" stroke="#d8b273"/>
+  <text x="817" y="283" class="keb" text-anchor="middle">Cron / outbox</text>
+  <text x="817" y="300" class="kec" text-anchor="middle" style="font-size:9.5px">email · reminders</text>
+  <rect x="606" y="330" width="278" height="52" rx="8" fill="#fff" stroke="#cfd6e0"/>
+  <text x="745" y="351" class="keb" text-anchor="middle">Observability</text>
+  <text x="745" y="368" class="kec" text-anchor="middle" style="font-size:9.5px">structured logs · request-id · health endpoint · AI cost log</text>
+  <line x1="400" y1="92" x2="400" y2="110" stroke="#65707f" marker-end="url(#ar4)"/>
+  <line x1="355" y1="238" x2="355" y2="260" stroke="#65707f" marker-end="url(#ar4)"/>
+  <line x1="450" y1="260" x2="450" y2="238" stroke="#65707f" marker-end="url(#ar4)" stroke-dasharray="4 3"/>
+  <line x1="780" y1="184" x2="700" y2="260" stroke="#65707f" marker-end="url(#ar4)"/>
+  <line x1="619" y1="238" x2="790" y2="260" stroke="#65707f" stroke-dasharray="4 3" marker-end="url(#ar4)"/>
+</svg>
+<figcaption>Figure 6 — One deployment, one database, two optional side-calls. Everything correctness-critical is inside the transaction.</figcaption>
+</figure>
+
+<h3>7.3 Repository layout</h3>
+
+<pre><code>smart-campus/
+├─ app/
+│  ├─ (public)/                    # student-facing: schedule, notices, room map
+│  ├─ (faculty)/book/              # search → compare → confirm flow
+│  ├─ (admin)/rooms|approvals|audit
+│  └─ api/
+│     ├─ rooms/availability/route.ts
+│     ├─ bookings/route.ts         # POST, GET
+│     ├─ bookings/[id]/route.ts    # PATCH (reschedule/cancel), GET
+│     ├─ bookings/[id]/alternatives/route.ts
+│     ├─ announcements/route.ts
+│     ├─ reports/route.ts
+│     ├─ ai/search/route.ts        # tool-call entry point
+│     └─ health/route.ts
+├─ lib/
+│  ├─ db/{schema.ts,client.ts,migrations/}
+│  ├─ policy/can.ts                # ONE authorization function
+│  ├─ scheduling/{availability.ts,conflicts.ts,score.ts,allocate.ts}
+│  ├─ ai/{adapter.ts,tools.ts,prompts.ts}
+│  ├─ time/{intervals.ts,periods.ts}   # pure, heavily unit-tested
+│  └─ validation/*.ts              # zod schemas shared with AI tools
+├─ data/
+│  ├─ campus_room_registry.json    # the blueprint, machine-readable
+│  └─ seed/{students.csv,timetable.json,demo_bookings.json}
+├─ scripts/{ingest-students.ts,seed.ts,reset-test-data.ts}
+├─ tests/{unit,e2e,load}
+├─ .github/workflows/ci.yml
+├─ docker-compose.yml              # local Postgres
+├─ .env.example · README.md · SETUP.md · ARCHITECTURE.md
+└─ docs/{blueprint-analysis.md,decisions/ADR-00x-*.md}</code></pre>
+
+<p>Two files in that tree do disproportionate work: <code>lib/policy/can.ts</code> (one function, used by every route, exhaustively tested — requirement 6 becomes a single test file) and <code>lib/time/intervals.ts</code> (pure interval maths, no I/O, fast unit tests — where the subtle bugs actually live). Keep both dependency-free.</p>
+
+<h2 id="s8"><span class="sec-num">Section 8</span>Roles, permissions, accountability</h2>
+
+<h3>8.1 Three roles, one matrix</h3>
+
+<p>Implement authorization as data, not as scattered <code>if</code> statements. One declarative matrix, one <code>can()</code> function, one parameterised test that walks every cell — that is the whole of requirement 6, and it is audit-proof in front of a judge.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:38%">Action</th><th style="width:15%">Student</th><th style="width:24%">Faculty</th><th style="width:23%">Administrator</th></tr></thead>
+  <tbody>
+    <tr><td>View own section schedule / all notices</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Search room availability</td><td>✅ (read-only)</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Create booking — classroom / lab (≤75, ≤2 h)</td><td>❌</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Create booking — Seminar Hall, Library, events &gt;100</td><td>❌</td><td>⏳ submits for approval</td><td>✅ approves</td></tr>
+    <tr><td>Reschedule / cancel own booking</td><td>❌</td><td>✅ (own only)</td><td>✅ (any)</td></tr>
+    <tr><td>Cancel any booking</td><td>❌</td><td>❌</td><td>✅</td></tr>
+    <tr><td>Publish announcement (section-level)</td><td>❌</td><td>✅ for own sections</td><td>✅</td></tr>
+    <tr><td>Publish announcement (campus/building-wide)</td><td>❌</td><td>❌</td><td>✅</td></tr>
+    <tr><td>File report / comment on a booking</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td>Resolve a report, edit room data, change policy settings</td><td>❌</td><td>❌</td><td>✅</td></tr>
+    <tr><td>View audit log</td><td>❌</td><td>✅ (own actions + affected rooms)</td><td>✅ (all)</td></tr>
+    <tr><td>Import students / manage users</td><td>❌</td><td>❌</td><td>✅</td></tr>
+  </tbody>
+</table>
+
+<pre><code>// lib/policy/can.ts — the only place authority is decided
+type Action =
+  | 'booking:create' | 'booking:update' | 'booking:cancel' | 'booking:approve'
+  | 'announcement:publish' | 'report:create' | 'report:resolve'
+  | 'room:update' | 'settings:update' | 'audit:read' | 'room:read';
+
+export function can(actor: Actor, action: Action, resource?: Resource): Decision {
+  // returns { allowed: boolean, reason?: string, requiresApproval?: boolean }
+  // Every route handler calls this FIRST and returns 403 with the reason on denial.
+}
+</code></pre>
+
+<div class="box">
+  <span class="t">Enforce server-side, always</span>
+  <p>Hiding a button is a UX choice; the policy check in the route handler is the security. Test it explicitly: log in as a student, then replay a faculty request with the student's cookie (curl or Playwright) and assert <code>403</code>. That one test line is what stops a judge's follow-up question from becoming an embarrassing discovery.</p>
+</div>
+
+<h3>8.2 Accountability without a logging graveyard</h3>
+
+<p>Requirement 7 says "maintain a history of important bookings and changes to help resolve misunderstandings". Two layers, two different jobs:</p>
+
+<ul>
+  <li><strong><code>BookingEvent</code> is the human-readable biography</strong> of one booking: created by X at T, approved by Y, moved from IET19 to IET18 by Z with reason "room clash with practical", cancelled with reason. This is what the UI renders in a "History" panel — the thing that actually resolves a misunderstanding between two faculty members.</li>
+  <li><strong><code>AuditEvent</code> is the machine-grade, tamper-evident trail</strong>: append-only, one row per mutation, carrying <code>before</code>/<code>after</code> JSON, actor, request id and IP. No API route can update or delete it; the DB user for the app has no <code>UPDATE</code>/<code>DELETE</code> grant on that table. This is what answers "who changed the exam room twenty minutes before the exam?" — the exact NSS failure scenario.</li>
+</ul>
+
+<p>Also record <em>why</em>, not just <em>what</em>: a mandatory free-text <code>reason</code> on every cancel/reschedule is the single cheapest feature that turns a log into evidence. Show it in the notice: "IET24 exam moved to LH08 — see notice #214 for the reason."</p>
+
+<h2 id="s9"><span class="sec-num">Section 9</span>Announcements, student access, notifications</h2>
+
+<h3>9.1 The information gap is the actual bug</h3>
+
+<p>Re-read the incident in the statement: students missed a minor examination because of "incorrect or insufficient information about the examination arrangements". Nothing in that sentence is about booking software. It is about <strong>distribution</strong>. So the notice system is not a nice-to-have on a checklist — it is the feature that addresses the stated failure. Design it accordingly:</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:22%">Design decision</th><th style="width:38%">Implementation</th><th style="width:40%">Why</th></tr></thead>
+  <tbody>
+    <tr><td>Notices are scoped, not global</td><td><code>scope = CAMPUS | BUILDING | SECTION | ROOM | BOOKING</code> + <code>scope_id</code></td><td>A section only sees what affects it; a wall of irrelevant notices is how real notices get ignored</td></tr>
+    <tr><td>Every notice can point at a booking</td><td><code>supersedes_booking_id</code> + automatic notice on cancel/reschedule</td><td>Guarantees that changing a booking <em>cannot</em> happen silently — the failure mode from the statement is designed out</td></tr>
+    <tr><td>Severity levels</td><td><code>INFO | IMPORTANT | CRITICAL</code>; CRITICAL pins to the top and triggers email/SMS-style notification</td><td>An exam-room change and a seminar reminder must not look identical</td></tr>
+    <tr><td>Publish and expiry times</td><td><code>publish_at</code>, <code>expires_at</code>, "last updated" always visible</td><td>Stale notices are as dangerous as missing ones — the statement mentions outdated information explicitly</td></tr>
+    <tr><td>Versioned edits</td><td>Edit creates a new version; students can see that it was changed and when</td><td>"The notice said IET24 yesterday" is exactly the dispute you want to settle with data</td></tr>
+    <tr><td>Delivery is layered</td><td>In-app feed (always) → email digest (daily) → email on CRITICAL → optional Telegram/WhatsApp webhook</td><td>Students live on phones and messaging apps; email-only reaches nobody. A webhook is 20 lines and demos beautifully</td></tr>
+  </tbody>
+</table>
+
+<h3>9.2 Student access — voice without authority</h3>
+
+<p>Requirement 5 is precise: students may view and may comment or report, but may not modify official bookings. Implement it as three surfaces with hard separation:</p>
+
+<div class="grid3">
+  <div class="card"><h4>1 · View</h4><p class="small" style="margin-bottom:0">Today's schedule, week grid, room map, notices feed. Server-rendered, filterable by section, and <strong>no mutation routes are reachable from a student session</strong>.</p></div>
+  <div class="card"><h4>2 · Comment</h4><p class="small" style="margin-bottom:0">A thread attached to a booking. Visible to the booking owner and admins, not to the whole campus. Rate-limited, moderated, editable in the first 15 minutes.</p></div>
+  <div class="card"><h4>3 · Report</h4><p class="small" style="margin-bottom:0">Structured form: <em>wrong room</em> / <em>cancelled but still listed</em> / <em>clashes with another class</em> / <em>outdated</em> / <em>other</em>. Goes to a triage queue with a status lifecycle.</p></div>
+</div>
+
+<p>Two engineering touches make reports trustworthy rather than noisy: (a) <strong>aggregate duplicates</strong> — twelve students reporting the same booking become one item with a count of 12, which is exactly the signal an admin needs; (b) <strong>close the loop</strong> — when a report is resolved, the reporter is notified with the outcome. A reporting channel that never answers is worse than none.</p>
+
+<h3>9.3 Notifications: the outbox pattern in one paragraph</h3>
+
+<p>Write a <code>Notification</code> row <em>inside</em> the booking transaction, and let a scheduled function send it afterwards. This costs ~20 lines and prevents the classic failure where the mail API times out and the booking is rolled back even though the room is free. It also gives you a retry queue for free: rows with <code>status='pending'</code> older than a minute get retried, and the dispatch log is the proof that notices actually went out.</p>
+
+<pre><code>Booking transaction ──► Notification(status=pending) ──► [cron: every 60 s] ──► provider
+                                                     └─► status=sent | failed (+retries, backoff)</code></pre>
+<h2 id="s10"><span class="sec-num">Section 10</span>DevOps: repository, CI/CD, testing, resilience</h2>
+
+<p>The event is called <em>Build With AI: DevOps</em>. Half the title is DevOps, and the deliverable explicitly includes a repository and setup instructions. Teams routinely lose points here by shipping an app with no pipeline, no tests and a README that says "run npm start". This section is deliberately prescriptive so it can be executed in an afternoon.</p>
+
+<h3>10.1 Branching and review</h3>
+
+<ul>
+  <li><strong>Trunk-based with short-lived branches</strong>: <code>main</code> is always deployable; features live on <code>feat/…</code> for a day, not a week. Protect <code>main</code>: PR required, CI green required, one review required.</li>
+  <li><strong>Conventional commits</strong> (<code>feat:</code>, <code>fix:</code>, <code>test:</code>, <code>docs:</code>) so the changelog and release notes write themselves.</li>
+  <li><strong>Preview deployment per PR</strong> (Vercel does this automatically) — the PR description then contains a live URL, which is a genuinely impressive thing to show.</li>
+  <li><strong>Seed data is versioned, not hand-managed</strong>: <code>campus_room_registry.json</code> and the seed CSVs live in the repo, so any teammate (or judge) can reproduce the exact demo state with two commands.</li>
+</ul>
+
+<h3>10.2 The CI pipeline</h3>
+
+<pre><code>name: ci
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres: { image: postgres:16, env: { POSTGRES_PASSWORD: test }, ports: ['5432:5432'] }
+    steps:
+      - checkout
+      - setup node 20 (cache: pnpm)
+      - pnpm i --frozen-lockfile
+      - pnpm lint                    # eslint + prettier --check
+      - pnpm typecheck               # tsc --noEmit
+      - pnpm db:migrate              # applies migrations incl. the EXCLUDE constraint
+      - pnpm db:seed:test            # registry + students + test bookings
+      - pnpm test:unit               # vitest: intervals, scoring, policy matrix
+      - pnpm test:e2e                # playwright: 3 journeys (below)
+      - pnpm build                   # must succeed or no deploy
+  deploy:
+    needs: verify
+    if: github.ref == 'refs/heads/main'
+    steps: [ deploy to Vercel via CLI or the native integration ]</code></pre>
+
+<p>Four gates — <em>lint, typecheck, test, build</em> — are enough. Add a <code>pnpm test:load</code> job that runs only on <code>main</code> (or by manual trigger) so the 200-user race test doesn't slow every PR.</p>
+
+<h3>10.3 The test strategy that actually catches the bugs</h3>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:14%">Layer</th><th style="width:20%">Tool</th><th style="width:42%">The tests that matter (write these, skip the rest)</th><th style="width:24%">Bug class they kill</th></tr></thead>
+  <tbody>
+    <tr><td>Unit</td><td>Vitest</td><td>Half-open interval maths (adjacent vs overlapping); overlap detection across a DST-free but half-hour-offset timezone; <code>capacityFit</code> and every scoring term at boundary values; period-grid conversion</td><td>The "back-to-back bookings clash" and "80-seat room offered to 81 students" bugs</td></tr>
+    <tr><td>Integration</td><td>Vitest + real Postgres</td><td>Two concurrent inserts into the same room/slot → one commits, one gets <code>23P01</code>; cancelled booking frees the slot; closure blocks the slot; approval-required purposes land in <code>PENDING</code></td><td>The race condition, and the "cancelled but still blocked" bug</td></tr>
+    <tr><td>Policy</td><td>Vitest</td><td>Full matrix from §8.1 walked programmatically — every (role × action) cell asserted, including the negative ones</td><td>Privilege leaks, the single most damaging demo failure</td></tr>
+    <tr><td>E2E</td><td>Playwright</td><td>① Faculty finds a room and books it → sees it in the schedule. ② Faculty attempts a clashing booking → sees the conflict + a usable alternative → books the alternative. ③ Admin cancels a booking → the affected section's schedule and notice feed update. ④ Student attempts a booking → <code>403</code>.</td><td>Broken integration between the layers; the "it worked on my machine" gap</td></tr>
+    <tr><td>Property</td><td>fast-check</td><td>Generate 500 random booking sets; assert no generated recommendation ever overlaps an existing booking, and that availability + occupied = 1 for every (room, window) pair</td><td>The false-recommendation class, which the statement calls out explicitly</td></tr>
+    <tr><td>Load</td><td>k6</td><td>200 virtual users, 60 s, 70% of requests targeting three popular rooms — report p95 latency and the count of <code>409</code>s (must equal attempted duplicates, not zero failures)</td><td>The concurrency claim, and a slide's worth of numbers</td></tr>
+  </tbody>
+</table>
+
+<h3>10.4 Environment and configuration</h3>
+
+<pre><code># .env.example — committed; .env.local is git-ignored
+DATABASE_URL=postgresql://user:pass@host:5432/smartcampus
+AUTH_SECRET=            # 32+ random bytes
+LLM_PROVIDER=           # e.g. openai | anthropic | google
+LLM_API_KEY=            # if absent, AI features degrade gracefully to forms
+LLM_MODEL_SMALL=        # intent extraction
+LLM_MODEL_LARGE=        # notice drafting
+EMAIL_PROVIDER_KEY=     # optional; notices still publish in-app without it
+APP_BASE_URL=https://…
+TZ=Asia/Kolkata</code></pre>
+
+<p>Three rules: (1) the app must <strong>boot with only <code>DATABASE_URL</code></strong> present — everything else is optional and degrades; (2) <strong>fail loudly at startup</strong> on a missing required variable, not silently at request time; (3) validate the env with a zod schema in one file, so a typo in a key name is a build error rather than a mystery 500 twenty minutes into judging.</p>
+
+<h3>10.5 Setup instructions that make judging easy</h3>
+
+<p>The README is a scored artefact. Target: <strong>a stranger reaches a running app in under five minutes.</strong> Put this block at the top, in this order, with real copy-pasteable commands:</p>
+
+<pre><code>## Quick start
+git clone … &amp;&amp; cd smart-campus
+cp .env.example .env            # add DATABASE_URL (Neon free tier: 1 min)
+pnpm i
+docker compose up -d db         # or use the hosted DB from step 2
+pnpm db:migrate &amp;&amp; pnpm db:seed # rooms + 2,400 students + demo bookings
+pnpm dev                        # http://localhost:3000
+
+## Demo accounts
+student.demo@ddugu.ac.in / …    (read-only)
+faculty.demo@ddugu.ac.in / …    (booking + notices)
+admin.demo@ddugu.ac.in   / …    (approvals, room data, audit)
+
+## What is real and what is test data
+Rooms, floors and capacities: from the supplied blueprint (§3.2 ledger).
+Students/branches: from the supplied dataset, normalised (§3.3).
+Timetable distribution: invented representation, clearly labelled TEST.</code></pre>
+
+<h3>10.6 Observability in ten minutes</h3>
+
+<p>You do not need a monitoring stack; you need four cheap things that make the system debuggable during the demo:</p>
+
+<ol>
+  <li><strong>Request IDs</strong> — generate one per request, put it in every log line, return it in every error body. When something goes wrong on stage, you can find it.</li>
+  <li><strong>Structured logs</strong> (JSON) with fields <code>route</code>, <code>actor_id</code>, <code>room_id</code>, <code>duration_ms</code>, <code>outcome</code>.</li>
+  <li><strong><code>/api/health</code></strong> returning DB latency, migration version and feature flags — a 2-second judge-pleaser and a genuine readiness signal.</li>
+  <li><strong>An audit/AI usage panel in the admin UI</strong> — recent bookings, rejections, AI calls and their cost. It turns invisible engineering into a visible demo screen.</li>
+</ol>
+
+<h3>10.7 Deployment topology</h3>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:20%">Piece</th><th style="width:26%">Where</th><th style="width:54%">Note</th></tr></thead>
+  <tbody>
+    <tr><td>App</td><td>Vercel (Hobby) or equivalent Node host</td><td>Auto-deploy on <code>main</code>, preview per PR. Bind to <code>0.0.0.0</code> in dev containers if you run in a sandbox.</td></tr>
+    <tr><td>Database</td><td>Neon / Supabase free tier, <code>Asia</code> region</td><td>Pick the region nearest Gorakhpur to keep p95 low; run migrations from CI, not from a laptop</td></tr>
+    <tr><td>Cron</td><td>Vercel Cron (or GitHub Actions schedule)</td><td>One job for the notification outbox, one for expiring notices — 2 minute-level jobs, nothing more</td></tr>
+    <tr><td>Secrets</td><td>Host env vars + GitHub secrets</td><td>Never in the repo; a leaked key in a public hackathon repo is a real, common loss</td></tr>
+    <tr><td>Backup</td><td><code>pg_dump</code> to a file before the demo</td><td>Restoring in 30 seconds beats debugging in front of judges</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s11"><span class="sec-num">Section 11</span>The ten-day build plan</h2>
+
+<p>Assume a team of three or four with a week and a half. The plan is ordered by <em>risk retirement</em>: the scary, load-bearing things (schema, exclusion constraint, availability query) come first, and the polish comes last, because polish applied to a broken core is wasted. Each day ends with something demonstrable — that is the discipline that keeps a hackathon project from collapsing on the final night.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:6%">Day</th><th style="width:26%">Goal</th><th style="width:40%">Deliverables</th><th style="width:28%">Done when…</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><strong>Foundations</strong></td><td>Repo, Next.js scaffold, Postgres up (Docker + Neon), Drizzle schema, first migration <em>with the <code>EXCLUDE</code> constraint</em>, <code>campus_room_registry.json</code> imported as seed, health endpoint, CI skeleton</td><td><code>pnpm db:seed</code> populates 34 rooms; two overlapping inserts fail at the DB level — proven by a script</td></tr>
+    <tr><td>2</td><td><strong>Data in</strong></td><td>Student CSV ingest with the six-stage pipeline (§3.3), branch normalisation, section resolution to 32 sections, auth (email/password + roles), seeded demo accounts, policy module + matrix test</td><td>2,400 students, 32 sections, three roles logging in; the policy matrix test is green</td></tr>
+    <tr><td>3</td><td><strong>Availability</strong></td><td>Availability query over bookings + timetable + closures; the search UI (building/floor/capacity/time); the floor-plan room picker; a seeded representative timetable</td><td>A judge can ask "what's free on the IET first floor at 10:00 tomorrow for 70 students" and get a correct, fast answer</td></tr>
+    <tr><td>4</td><td><strong>Booking + conflicts</strong></td><td>POST booking transaction with idempotency + audit; <code>409</code> handler; alternatives generator with the §5.4 scorer; booking detail page with history</td><td>Deliberately clashing bookings produce a friendly conflict plus three usable alternatives; concurrent test passes</td></tr>
+    <tr><td>5</td><td><strong>Notices + students</strong></td><td>Announcements (scoped, severity, versioned); auto-notice on cancel/reschedule; student schedule views; reports + comment threads; notification outbox + cron</td><td>Cancelling a booking visibly updates the affected section's schedule and notice feed</td></tr>
+    <tr><td>6</td><td><strong>AI layer</strong></td><td>LLM adapter, tool-call schema, natural-language search, recommendation explainer, notice drafting; graceful fallback when the key is absent; AI usage log</td><td>Typing a messy sentence returns grounded, correct rooms — and pulling the API key still leaves a working app</td></tr>
+    <tr><td>7</td><td><strong>Allocation + admin</strong></td><td>Timetable auto-allocation (greedy + local search) with a before/after cost report; admin screens: room data confirmation, approvals queue, audit viewer, policy settings</td><td>One click re-allocates a day of classes and reports exactly what moved and why</td></tr>
+    <tr><td>8</td><td><strong>Hardening</strong></td><td>Property tests, E2E suite, k6 load test, error boundaries, empty states, mobile pass, accessibility (keyboard + contrast), performance budget check</td><td>All six risk items in §13 have either a test or a documented fallback</td></tr>
+    <tr><td>9</td><td><strong>DevOps + docs</strong></td><td>Full CI green, deploy from <code>main</code>, <code>SETUP.md</code>, <code>ARCHITECTURE.md</code>, three short ADRs (why PostgreSQL exclusion constraints; why deterministic scoring with AI on top; why test-data flags), README rewrite</td><td>A stranger clones, runs two commands, and reaches a working app in under five minutes</td></tr>
+    <tr><td>10</td><td><strong>Demo</strong></td><td>Rehearse the §12 script three times on the deployed URL; record a 3-minute backup video; seed a clean demo dataset; prepare one slide of blueprint analysis and one of the space-time budget</td><td>The script runs end to end in 7 minutes without a hitch, twice in a row</td></tr>
+  </tbody>
+</table>
+
+<div class="box warn">
+  <span class="t">Sequencing rules that prevent the usual collapse</span>
+  <p><strong>Schema before screens.</strong> Every hour spent on the data model on day 1 saves three on day 6. <strong>The exclusion constraint on day 1, not day 9</strong> — discovering on the last night that your ORM cannot express it is a classic. <strong>The AI on day 6, never day 1</strong>: it is the most fun and the least load-bearing; build the deterministic engine first so the AI has something truthful to talk about. <strong>Freeze features after day 8.</strong> Day 9 and 10 are for evidence and rehearsal, and a rehearsed 7-minute demo beats an unrehearsed 12-minute one every time.</p>
+</div>
+
+<h3>11.1 Parallel tracks for a team of four</h3>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:16%">Track</th><th style="width:42%">Owns</th><th style="width:42%">Interface contract (agree on day 1, in writing)</th></tr></thead>
+  <tbody>
+    <tr><td>Data &amp; engine</td><td>Schema, migrations, ingest, availability, conflicts, scoring, allocation</td><td>Exports typed functions: <code>searchAvailability(filters)</code>, <code>createBooking(input)</code>, <code>suggestAlternatives(req)</code></td></tr>
+    <tr><td>API &amp; auth</td><td>Route handlers, policy module, validation schemas, audit, outbox</td><td>Publishes the OpenAPI-ish contract (§14.1) that the UI codes against</td></tr>
+    <tr><td>UI &amp; UX</td><td>Search → compare → confirm flow, schedules, notices, admin screens, floor plan, mobile</td><td>Consumes only the contract; mocks it with fixtures from day 2 so it never blocks</td></tr>
+    <tr><td>AI &amp; DevOps</td><td>LLM adapter + tools, CI/CD, tests, load test, docs, demo video</td><td>Owns <code>.github/</code>, <code>docs/</code>, <code>tests/</code>; reviews every PR's env and secret usage</td></tr>
+  </tbody>
+</table>
+
+<p>The single highest-value artefact of day 1 is the API contract document. Four people coding against a written contract can move in parallel; four people coding against each other's assumptions produce a merge nightmare on day 7.</p>
+
+<h2 id="s12"><span class="sec-num">Section 12</span>Demo script mapped to the rubric</h2>
+
+<p>Seven minutes, deployed URL, one laptop, one phone. Every segment maps to a numbered requirement, so the judge's checklist gets ticked in order without you having to say "and we also have…".</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:5%">Min</th><th style="width:31%">What you show</th><th style="width:38%">What you say (the load-bearing sentence)</th><th style="width:26%">Requirement proved</th></tr></thead>
+  <tbody>
+    <tr><td>0:00</td><td>One slide: the two building plans, side by side, with the 100 m gap and the stair cores marked</td><td>"We read the blueprint first. Six branches, 32 sections, 30 bookable rooms, two buildings, one stair core each, no lift. That determined every design choice that follows."</td><td>Understanding of infrastructure</td></tr>
+    <tr><td>0:45</td><td>One slide: the space-time budget table (§2.5)</td><td>"7 periods a day across 32 sections needs 93% of every room on campus. And a spaced 75-student exam fits in exactly two rooms — which is why last year's exam notice failed. This is an allocation problem, not a calendar problem."</td><td>Depth of analysis</td></tr>
+    <tr><td>1:30</td><td>Faculty login → search: "tomorrow 10:00–11:00, 72 students, IET" → results with capacity and walk-time</td><td>"Availability is computed from bookings, the official timetable and room closures, in one query against a range index."</td><td>1 · Room availability</td></tr>
+    <tr><td>2:15</td><td>Book IET19 → confirmation → appears instantly on the CSE-2A schedule (open on the phone)</td><td>"One transaction writes the booking, the history event and the notice queue together. Nothing can half-happen."</td><td>2 · Booking, 7 · Accountability</td></tr>
+    <tr><td>2:45</td><td>Second faculty session tries IET19 at the same time → friendly conflict + three ranked alternatives with reasons</td><td>"Overlap isn't prevented by our code — it's prevented by the database. A PostgreSQL exclusion constraint makes two confirmed bookings for the same room and time unrepresentable. We tested it with 200 concurrent requests."</td><td>3 · Conflict prevention</td></tr>
+    <tr><td>3:30</td><td>Take the third alternative: Deeksha Bhawan LH08, shifted 20 minutes → system shows the 100 m walk and the 10-minute turnaround rule</td><td>"The buildings aren't adjacent and neither has a lift, so the engine charges travel and floor-change costs. It will suggest a different building — but it tells you what it costs."</td><td>8 · Intelligent assistance</td></tr>
+    <tr><td>4:15</td><td>Cancel the IET19 booking with a reason → notice auto-drafted → publish → student phone shows CRITICAL notice at the top of the feed</td><td>"Cancelling a booking cannot be silent. A notice is generated, versioned, and pushed to exactly the sections affected."</td><td>4 · Schedule updates</td></tr>
+    <tr><td>5:00</td><td>Student files a report: "this exam is in the wrong room" → admin triage queue shows it aggregated ×12 → resolve → reporter notified</td><td>"Students can't modify bookings, and the API test proves it with a 403. But they can report, and twelve reports become one actionable signal."</td><td>5 · Student access, 6 · RBAC</td></tr>
+    <tr><td>5:45</td><td>Admin audit view: filter by room, see before/after values and actor for every change</td><td>"This answers 'who moved the exam twenty minutes before it started' — the exact question nobody could answer last year."</td><td>7 · Accountability</td></tr>
+    <tr><td>6:15</td><td>Switch to the AI chat, type one messy sentence, get a grounded answer with a book button</td><td>"The model has read-only tools. Every fact it says comes from a row we just queried — it cannot hallucinate a free room. Kill the API key and the form still works."</td><td>8 · Intelligent assistance</td></tr>
+    <tr><td>6:45</td><td>Close on the pipeline tab: green CI, preview deploys, k6 output, the five-row reconciliation ledger</td><td>"Blueprint first, database-enforced correctness, AI on a short leash, and every ambiguity documented rather than hidden."</td><td>Deliverable · DevOps</td></tr>
+  </tbody>
+</table>
+
+<div class="box good">
+  <span class="t">Three demo habits worth more than any feature</span>
+  <p><strong>Seed a clean, believable state</strong> the morning of the demo — an empty campus looks unfinished, a chaotic one looks broken; aim for a realistic day with a few test bookings, all chipped <span class="pill w">TEST</span>. <strong>Keep a second browser profile</strong> logged in as the second faculty member so the conflict is genuinely concurrent, not a pause while you log out. <strong>Record a 3-minute backup video</strong> on the deployed URL and have it ready — every hackathon has at least one live demo that dies on stage, and the team that has the video loses nothing.</p>
+</div>
+
+<h2 id="s13"><span class="sec-num">Section 13</span>Risk register</h2>
+
+<p>Six things can realistically kill this project, ordered by probability. Each has a mitigation you can act on this week and a fallback that keeps the demo alive.</p>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:22%">Risk</th><th style="width:9%">Likelihood</th><th style="width:35%">Mitigation</th><th style="width:34%">Fallback if it happens anyway</th></tr></thead>
+  <tbody>
+    <tr><td>The student dataset's columns don't match expectations</td><td>High</td><td>Six-stage ingest with alias maps and a <code>--dry-run</code> diff (§3.3); never assume a column name — detect it</td><td>Ship the registry + a generated synthetic student set, clearly labelled; the demo works and the ingest story is still told honestly</td></tr>
+    <tr><td>Blueprint ambiguities are questioned by judges</td><td>High</td><td>The reconciliation ledger (§3.2), the <code>unconfirmed</code> flag, and an admin screen to confirm room data</td><td>Say plainly: "the sources disagree in five places; here is how we resolved each one and here is the one-click fix if the organisers clarify" — this reads as rigour, not weakness</td></tr>
+    <tr><td>ORMs fight the interval/exclusion constraint</td><td>Medium</td><td>Hand-write that one migration; keep the constraint in SQL; test it on day 1 with a raw-SQL script</td><td>Check-then-insert inside a <code>SERIALIZABLE</code> transaction with retry — correct, slightly slower, and document the trade-off</td></tr>
+    <tr><td>LLM outage or rate limit during judging</td><td>Medium</td><td>Provider-agnostic adapter, 8 s timeout, deterministic fallback UI, cached prompts</td><td>The form-based search is the primary path anyway; the AI is additive by design — nothing to apologise for</td></tr>
+    <tr><td>Last-minute integration failure</td><td>Medium</td><td>API contract written on day 1; UI mocked against fixtures from day 2; freeze features after day 8; deploy continuously, never at the end</td><td>Deploy a tagged release from day 9 and demo that; a slightly older working build beats a fresh broken one</td></tr>
+    <tr><td>Data loss or a wiped database on demo day</td><td>Low</td><td><code>pg_dump</code> before the demo; seed scripts idempotent and committed; preview environment mirrors production</td><td>Restore from the dump in 30 seconds — rehearse this once, it takes two minutes</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s14"><span class="sec-num">Section 14</span>Appendices</h2>
+
+<h3>14.1 API surface (the day-1 contract)</h3>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:10%">Method</th><th style="width:26%">Path</th><th style="width:34%">Purpose</th><th style="width:30%">Key inputs / outputs</th></tr></thead>
+  <tbody>
+    <tr><td>GET</td><td><code>/api/rooms</code></td><td>Room registry with floors, capacity, flags</td><td>filters: <code>building, floor, type, minCapacity</code></td></tr>
+    <tr><td>GET</td><td><code>/api/rooms/availability</code></td><td>Free rooms for a window</td><td>in: <code>date, start, duration, capacity, building?, purpose?, accessibleOnly?</code> · out: rooms + <code>freeWindows</code></td></tr>
+    <tr><td>GET</td><td><code>/api/rooms/:code/timeline</code></td><td>Occupancy for a day/week</td><td>out: bookings + timetable slots + closures</td></tr>
+    <tr><td>POST</td><td><code>/api/bookings</code></td><td>Create a booking</td><td>in: <code>roomCode, date, start, duration, purpose, headcount, sectionCode?, reason?, idempotencyKey</code> · out: <code>201</code> booking, or <code>409</code> + alternatives, or <code>202</code> pending approval</td></tr>
+    <tr><td>PATCH</td><td><code>/api/bookings/:id</code></td><td>Reschedule or cancel (with reason)</td><td>in: <code>action: MOVE|CANCEL, newStart?, reason</code> · writes BookingEvent + AuditEvent + notice</td></tr>
+    <tr><td>GET</td><td><code>/api/bookings/:id/alternatives</code></td><td>Ranked substitutes</td><td>out: <code>[{room, window, score, reasons}]</code></td></tr>
+    <tr><td>POST</td><td><code>/api/bookings/:id/reports</code></td><td>Student report / comment</td><td>in: <code>kind, message</code> · out: aggregated report item</td></tr>
+    <tr><td>GET</td><td><code>/api/schedules/:section</code></td><td>Section timetable + changes</td><td>out: slots, bookings, notices, <code>updatedAt</code></td></tr>
+    <tr><td>POST</td><td><code>/api/announcements</code></td><td>Publish a notice</td><td>in: <code>scope, scopeId, severity, title, body, publishAt, expiresAt, supersedesBookingId?</code></td></tr>
+    <tr><td>POST</td><td><code>/api/ai/search</code></td><td>Natural-language search (tool call)</td><td>in: <code>utterance</code> · out: grounded rooms + explanation + <code>provenance[]</code></td></tr>
+    <tr><td>POST</td><td><code>/api/admin/allocate</code></td><td>Run timetable allocation</td><td>in: <code>dateRange, priorities[]</code> · out: before/after cost, list of moves</td></tr>
+    <tr><td>GET</td><td><code>/api/admin/audit</code></td><td>Query the audit trail</td><td>filters: <code>room, actor, entity, from, to</code></td></tr>
+    <tr><td>GET</td><td><code>/api/health</code></td><td>Readiness probe</td><td>out: db latency, migration version, feature flags</td></tr>
+  </tbody>
+</table>
+
+<h3>14.2 Core schema, condensed</h3>
+
+<pre><code>-- Only the columns that carry decisions are shown.
+CREATE TABLE "Room" (
+  id            uuid PRIMARY KEY,
+  code          text UNIQUE NOT NULL,          -- 'IET20', 'LH08', 'LIB' (campus-spoken, not invented)
+  floor_id      uuid NOT NULL REFERENCES "Floor"(id),
+  type          text NOT NULL,                 -- CLASS | LAB | SEMINAR | LIBRARY | OFFICE | SERVICE
+  capacity      int  NOT NULL,                 -- normal seating
+  exam_capacity int  NOT NULL,                 -- spaced seating (policy, not physics)
+  bookable      boolean NOT NULL DEFAULT true,
+  accessibility text NOT NULL DEFAULT 'stairs_only',  -- step_free | stairs_only
+  zone          text,                          -- IET-FF-NORTH, DB-GF …
+  permitted_uses text[] NOT NULL,
+  unconfirmed   boolean NOT NULL DEFAULT false -- one of the five source ambiguities
+);
+
+CREATE TABLE "Booking" (
+  id              uuid PRIMARY KEY,
+  ref             text UNIQUE NOT NULL,        -- 'BK-2026-000137'
+  room_id         uuid NOT NULL REFERENCES "Room"(id),
+  start_at        timestamptz NOT NULL,
+  end_at          timestamptz NOT NULL,
+  purpose         text NOT NULL,               -- CLASS|EXAM|PRACTICAL|EVENT|SEMINAR|VIVA|OTHER
+  headcount       int  NOT NULL,
+  section_id      uuid REFERENCES "Section"(id),
+  requested_by    uuid NOT NULL REFERENCES "User"(id),
+  status          text NOT NULL DEFAULT 'CONFIRMED',
+  reason          text,
+  is_test         boolean NOT NULL DEFAULT false,
+  seed_source     text,                        -- 'demo' | 'user'
+  idempotency_key text UNIQUE,
+  version         int NOT NULL DEFAULT 0,
+  created_at      timestamptz NOT NULL DEFAULT now(),
+  CHECK (end_at &gt; start_at)
+);
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+ALTER TABLE "Booking" ADD CONSTRAINT booking_no_overlap
+  EXCLUDE USING gist (room_id WITH =, tstzrange(start_at, end_at, '[)') WITH &amp;&amp;)
+  WHERE (status IN ('CONFIRMED','PENDING_APPROVAL'));
+
+CREATE INDEX ON "Booking" (room_id, start_at DESC);
+CREATE INDEX booking_range_gist ON "Booking" USING gist (tstzrange(start_at, end_at, '[)'));</code></pre>
+
+<h3>14.3 Settings that must be data, not code</h3>
+
+<pre><code>{ "periodGrid": [ { "id":"P1", "start":"09:00", "end":"09:55" }, "…" ],
+  "lunch": { "start":"12:40", "end":"13:30" },
+  "examSeatSpacingFactor": 0.5,
+  "crossBuildingMinGapMinutes": 10,
+  "walkSeconds": { "GF-GF":240, "FF-FF":340, "SF-GF":360 },
+  "bookingHorizonDays": 60,
+  "leadTimeMinutes": 15,
+  "approvalRequired": { "IET32": true, "LIB": true, "headcountAbove": 100 },
+  "maxShiftMinutesForAlternatives": 30,
+  "scoreWeights": { "capacityFit":0.22, "sameBuilding":0.20, "sameFloor":0.12,
+                    "purposeFit":0.12, "featureMatch":0.10, "disruption":0.08,
+                    "timeShift":0.08, "accessibility":0.05, "fairness":0.03 } }</code></pre>
+
+<h3>14.4 Pre-submission checklist</h3>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:6%">✓</th><th style="width:94%">Item</th></tr></thead>
+  <tbody>
+    <tr><td>☐</td><td>All <strong>34 rooms</strong> from both buildings are seeded, with the 5 source ambiguities flagged — nothing renamed, nothing invented</td></tr>
+    <tr><td>☐</td><td>Students, branches, batches and 32 sections imported from the supplied dataset, with rejected rows reported</td></tr>
+    <tr><td>☐</td><td>Availability search works by building, floor, room, date, time, duration and capacity</td></tr>
+    <tr><td>☐</td><td>Booking works for all four purposes, with capacity and permitted-use enforcement</td></tr>
+    <tr><td>☐</td><td>Double booking is impossible — proven by the concurrency test, not asserted</td></tr>
+    <tr><td>☐</td><td>Every conflict response offers at least three ranked, validated alternatives with reasons</td></tr>
+    <tr><td>☐</td><td>Cancel / reschedule / exam notices publish, version, and reach the affected sections</td></tr>
+    <tr><td>☐</td><td>Students can view and report, and provably cannot modify bookings (403 test)</td></tr>
+    <tr><td>☐</td><td>Three roles enforced server-side by one policy function, with a full matrix test</td></tr>
+    <tr><td>☐</td><td>Audit + booking history visible in the UI and queryable by room and actor</td></tr>
+    <tr><td>☐</td><td>AI features grounded in DB results, with a working fallback when the provider is unavailable</td></tr>
+    <tr><td>☐</td><td>Every seeded booking carries a visible <span class="pill w">TEST</span> chip; one command clears it</td></tr>
+    <tr><td>☐</td><td>CI green on <code>main</code>: lint, typecheck, unit, integration, E2E, build</td></tr>
+    <tr><td>☐</td><td>Deployed URL live; README quick-start works from a fresh clone in under five minutes</td></tr>
+    <tr><td>☐</td><td><code>SETUP.md</code>, <code>ARCHITECTURE.md</code>, three ADRs, <code>.env.example</code> complete</td></tr>
+    <tr><td>☐</td><td>Blueprint analysis and space-time budget slides ready; demo rehearsed twice; backup video recorded</td></tr>
+  </tbody>
+</table>
+
+<h3>14.5 The five decisions to defend in the viva</h3>
+
+<table class="t-narrow">
+  <thead><tr><th style="width:26%">Decision</th><th style="width:37%">The one-sentence defence</th><th style="width:37%">The alternative you rejected, and why</th></tr></thead>
+  <tbody>
+    <tr><td>PostgreSQL exclusion constraint, not application logic</td><td>"Overlap is impossible at the storage layer, so no race condition can create a double booking."</td><td>Check-then-write in app code: correct only under serialisable isolation with retries, and easy to get wrong silently</td></tr>
+    <tr><td>Deterministic scoring engine; AI only at the edges</td><td>"The model translates language and explains results; it never decides and never writes."</td><td>Letting the LLM answer directly: impressive for ten seconds, then it hallucinates a room and the whole premise fails</td></tr>
+    <tr><td>JSON room registry seeded from the blueprint</td><td>"One machine-readable source of truth, versioned in git, so room data cannot drift between UI, API and database."</td><td>Rows typed by hand into SQL fixtures and components: three copies that disagree by day five</td></tr>
+    <tr><td>Configurable policy (capacities, gaps, weights) as data</td><td>"Five facts were unknown, so we made them settings with documented defaults instead of guesses baked into code."</td><td>Hard-coded constants: every judge clarification becomes a code change and a redeploy</td></tr>
+    <tr><td>Test-data flags and one-command reset</td><td>"The statement requires test bookings to be identifiable; we made that a schema field, not a naming habit."</td><td>Prefixing titles with "TEST": invisible in calendars, impossible to clean up</td></tr>
+  </tbody>
+</table>
+
+<div class="foot">
+  <p><strong>Smart Campus Classroom Management System — build blueprint.</strong> Prepared for Build With AI: DevOps 2026, GDG on Campus, Deen Dayal Upadhyaya Gorakhpur University. Derived from the supplied problem statement and the architect's floor plan for IET and Deeksha Bhawan. Room identities and geometry are taken from the blueprint; stated capacities from the problem statement; all remaining values are documented, configurable defaults and are flagged in the data as unconfirmed. Seeded timetable distributions are representative test data, not the university's actual timetable.</p>
+  <p>Accompanying files: <code>campus_room_registry.json</code> (machine-readable room registry, 34 rooms) and <code>build_registry.py</code> (the generator plus the capacity/utilisation analysis used in §2.5).</p>
+</div>
+
+</div>
+</body>
+</html>
