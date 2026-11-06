@@ -1,0 +1,837 @@
+{
+  "suite": "browser",
+  "generated_at": "2026-11-06T10:58:42",
+  "results": [
+    {
+      "id": "B01",
+      "title": "Sign-in screen and demonstration accounts",
+      "role": "none",
+      "case": "base",
+      "steps": [
+        "Open the application"
+      ],
+      "expected": "The sign-in screen renders with three demo accounts",
+      "requirement": "Definition of done: three demonstration accounts printed on the sign-in page",
+      "tags": [],
+      "status": "passed",
+      "observation": "Three demonstration accounts and the sign-in form rendered on first load.",
+      "screenshots": [
+        "B01_sign_in.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:47:48",
+      "duration_s": 3.5
+    },
+    {
+      "id": "B02",
+      "title": "Faculty sign-in",
+      "role": "faculty",
+      "case": "base",
+      "steps": [
+        "Sign in as faculty"
+      ],
+      "expected": "The faculty shell opens on My reservations",
+      "requirement": "Table 5 \u00b7 role-based access",
+      "tags": [],
+      "status": "passed",
+      "observation": "Faculty sign-in reached the shell; sidebar shows five faculty screens.",
+      "screenshots": [
+        "B02_faculty_shell.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:47:52",
+      "duration_s": 14.2
+    },
+    {
+      "id": "B03",
+      "title": "Student sign-in",
+      "role": "student",
+      "case": "base",
+      "steps": [
+        "Sign in as a student"
+      ],
+      "expected": "The student lands on their own section's schedule",
+      "requirement": "Table 25 \u00b7 student access without modification",
+      "tags": [],
+      "status": "passed",
+      "observation": "Student sign-in landed on their own section's schedule.",
+      "screenshots": [
+        "B03_student_schedule.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:48:06",
+      "duration_s": 14.4
+    },
+    {
+      "id": "B04",
+      "title": "Administrator sign-in",
+      "role": "admin",
+      "case": "base",
+      "steps": [
+        "Sign in as the administrator"
+      ],
+      "expected": "The dashboard opens with register KPIs",
+      "requirement": "Table 5 \u00b7 administrator surfaces",
+      "tags": [],
+      "status": "passed",
+      "observation": "Administrative sign-in landed on the dashboard with the register KPIs.",
+      "screenshots": [
+        "B04_admin_dashboard.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:48:21",
+      "duration_s": 14.3
+    },
+    {
+      "id": "B05",
+      "title": "Wrong password refused",
+      "role": "none",
+      "case": "edge",
+      "steps": [
+        "Enter the wrong password",
+        "Submit"
+      ],
+      "expected": "Refused, shell never reached",
+      "requirement": "Policy layer refuses before any screen renders",
+      "tags": [],
+      "status": "passed",
+      "observation": "A wrong password is refused and the shell is never reached.",
+      "screenshots": [
+        "B05_wrong_password.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:48:35",
+      "duration_s": 5.3
+    },
+    {
+      "id": "B06",
+      "title": "Role switch swaps the demo account",
+      "role": "none",
+      "case": "edge",
+      "steps": [
+        "Open sign-in",
+        "Change role to student"
+      ],
+      "expected": "The login field shows the student account",
+      "requirement": "Definition of done: three accounts on the sign-in page",
+      "tags": [],
+      "status": "passed",
+      "observation": "Switching role from faculty to student replaced the demonstration login.",
+      "screenshots": [
+        "B06_role_switch.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:48:40",
+      "duration_s": 5.4
+    },
+    {
+      "id": "B07",
+      "title": "Availability search across both buildings",
+      "role": "faculty",
+      "case": "base",
+      "steps": [
+        "Find a room for 75 at 15:20",
+        "Submit the search"
+      ],
+      "expected": "Free rooms and excluded count",
+      "requirement": "Table 25 \u00b7 room availability across both buildings",
+      "tags": [],
+      "status": "passed",
+      "observation": "Search returned free rooms, an excluded count and the window summary.",
+      "screenshots": [
+        "B07_availability.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:48:46",
+      "duration_s": 28.9
+    },
+    {
+      "id": "B08",
+      "title": "Every excluded room carries a reason",
+      "role": "faculty",
+      "case": "normal",
+      "steps": [
+        "Search",
+        "Open the exclusion panel"
+      ],
+      "expected": "Reasons are named per room",
+      "requirement": "Listing 1 \u00b7 the union of three occupancy sources",
+      "tags": [],
+      "status": "passed",
+      "observation": "The exclusion panel names the reason for each room that was withheld.",
+      "screenshots": [
+        "B08_excluded_reasons.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:49:15",
+      "duration_s": 24.0
+    },
+    {
+      "id": "B09",
+      "title": "Book a room from the availability list",
+      "role": "faculty",
+      "case": "normal",
+      "steps": [
+        "Search",
+        "Reserve the first free room"
+      ],
+      "expected": "Reservation confirmed with its id",
+      "requirement": "Table 25 \u00b7 faculty booking for four purposes",
+      "tags": [],
+      "status": "passed",
+      "observation": "A reservation was created from the availability list; the interface reported 'Request recorded for approval'.",
+      "screenshots": [
+        "B09_booking_outcome.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:49:39",
+      "duration_s": 24.5
+    },
+    {
+      "id": "B10",
+      "title": "Examination larger than any spaced room",
+      "role": "faculty",
+      "case": "edge",
+      "steps": [
+        "Search EXAM, 150 candidates, 110 minutes"
+      ],
+      "expected": "A split across two rooms is proposed",
+      "requirement": "Section 9.3 \u00b7 split sittings",
+      "tags": [],
+      "status": "passed",
+      "observation": "An examination for 150 with spacing found no single room and proposed a split across two rooms instead of an empty list.",
+      "screenshots": [
+        "B10_exam_split.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:50:03",
+      "duration_s": 22.1
+    },
+    {
+      "id": "B11",
+      "title": "No room can seat the request",
+      "role": "faculty",
+      "case": "edge",
+      "steps": [
+        "Search CLASS, 200 headcount"
+      ],
+      "expected": "An explanation, not an empty table",
+      "requirement": "Section 5.1 \u00b7 no room fits",
+      "tags": [],
+      "status": "passed",
+      "observation": "A request no room can seat returned an explanation, not a blank table.",
+      "screenshots": [
+        "B11_nothing_fits.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:50:25",
+      "duration_s": 22.2
+    },
+    {
+      "id": "B12",
+      "title": "Faculty reservation list and statuses",
+      "role": "faculty",
+      "case": "base",
+      "steps": [
+        "Open My reservations"
+      ],
+      "expected": "Live, pending and cancelled rows with chips",
+      "requirement": "Section 4.4 \u00b7 nothing is deleted",
+      "tags": [],
+      "status": "passed",
+      "observation": "The faculty list shows live, pending and cancelled reservations with status chips.",
+      "screenshots": [
+        "B12_my_reservations.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:50:48",
+      "duration_s": 9.5
+    },
+    {
+      "id": "B13",
+      "title": "Cancel with and without a reason",
+      "role": "faculty",
+      "case": "edge",
+      "steps": [
+        "Open a reservation",
+        "Cancel without a reason",
+        "Cancel with a reason"
+      ],
+      "expected": "Refused without a reason; cancelled and kept with one",
+      "requirement": "Section 4.4 \u00b7 cancel, never delete",
+      "tags": [],
+      "status": "passed",
+      "observation": "A cancellation with no reason was refused with REASON_REQUIRED; with a reason the reservation moved to CANCELLED and stayed on record.",
+      "screenshots": [
+        "B13_cancel_with_reason.png",
+        "B13_cancel_without_reason.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:50:57",
+      "duration_s": 15.5
+    },
+    {
+      "id": "B14",
+      "title": "Reschedule a reservation",
+      "role": "faculty",
+      "case": "normal",
+      "steps": [
+        "Open a reservation",
+        "Reschedule tab",
+        "Move it"
+      ],
+      "expected": "The interval moves",
+      "requirement": "Table 5 \u00b7 reschedule own reservations",
+      "tags": [],
+      "status": "passed",
+      "observation": "The reservation was moved through the reschedule tab; the outcome was 'Moved, still waiting'.",
+      "screenshots": [
+        "B14_reschedule.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:51:13",
+      "duration_s": 36.3
+    },
+    {
+      "id": "B15",
+      "title": "Finish a class early",
+      "role": "faculty",
+      "case": "normal",
+      "steps": [
+        "Open a reservation",
+        "Finish early tab",
+        "Release"
+      ],
+      "expected": "The remainder returns to the pool",
+      "requirement": "Section 4.5 \u00b7 early release",
+      "tags": [],
+      "status": "passed",
+      "observation": "The early-release control shortened the interval and returned the remainder to the pool.",
+      "screenshots": [
+        "B15_early_release.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:51:49",
+      "duration_s": 13.6
+    },
+    {
+      "id": "B16",
+      "title": "Weekly series created as one action",
+      "role": "faculty",
+      "case": "base",
+      "steps": [
+        "Open Weekly series",
+        "Create a three-week series"
+      ],
+      "expected": "One series, three bookings",
+      "requirement": "Section 6.2 \u00b7 BOOKING_SERIES",
+      "tags": [],
+      "status": "passed",
+      "observation": "A weekly series was created as one action and listed with its live booking count.",
+      "screenshots": [
+        "B16_series.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:52:03",
+      "duration_s": 18.2
+    },
+    {
+      "id": "B17",
+      "title": "Publish a notice to a section",
+      "role": "faculty",
+      "case": "normal",
+      "steps": [
+        "Open Notices",
+        "Publish"
+      ],
+      "expected": "Outbox rows written and reported",
+      "requirement": "Table 25 \u00b7 schedule updates and announcements",
+      "tags": [],
+      "status": "passed",
+      "observation": "A section notice was published and the number of queued notifications was reported.",
+      "screenshots": [
+        "B17_section_notice.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:52:21",
+      "duration_s": 15.1
+    },
+    {
+      "id": "B18",
+      "title": "Student schedule with the next class",
+      "role": "student",
+      "case": "base",
+      "steps": [
+        "Sign in as a student"
+      ],
+      "expected": "The week's entries plus a next-class callout",
+      "requirement": "Figure 6 \u00b7 the student journey",
+      "tags": [],
+      "status": "passed",
+      "observation": "The student schedule shows the week's entries and the next class with room and time.",
+      "screenshots": [
+        "B18_student_schedule.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:52:36",
+      "duration_s": 14.3
+    },
+    {
+      "id": "B19",
+      "title": "Student files a structured report",
+      "role": "student",
+      "case": "normal",
+      "steps": [
+        "Open Report a problem",
+        "Choose a kind",
+        "Send"
+      ],
+      "expected": "Report accepted or merged",
+      "requirement": "Section 5.2 \u00b7 structured reports",
+      "tags": [],
+      "status": "passed",
+      "observation": "A structured report was accepted, or merged into the open one for that reservation.",
+      "screenshots": [
+        "B19_student_report.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:52:50",
+      "duration_s": 16.6
+    },
+    {
+      "id": "B20",
+      "title": "Duplicate report merges",
+      "role": "student",
+      "case": "edge",
+      "steps": [
+        "Send the same report a second time"
+      ],
+      "expected": "Merged into the open item with a count",
+      "requirement": "Section 5.2 \u00b7 duplicates are merged",
+      "tags": [],
+      "status": "passed",
+      "observation": "An identical second report merged into the open item and raised its count.",
+      "screenshots": [
+        "B20_duplicate_report.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:53:07",
+      "duration_s": 16.6
+    },
+    {
+      "id": "B21",
+      "title": "Student is read-only on availability",
+      "role": "student",
+      "case": "edge",
+      "steps": [
+        "Open Room availability",
+        "Search"
+      ],
+      "expected": "No reservation form exists",
+      "requirement": "Section 5.2 \u00b7 students read",
+      "tags": [],
+      "status": "passed",
+      "observation": "A student sees availability and the read-only notice, and no reservation form exists.",
+      "screenshots": [
+        "B21_student_readonly.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:53:24",
+      "duration_s": 22.2
+    },
+    {
+      "id": "B22",
+      "title": "Student navigation has no administrative screens",
+      "role": "student",
+      "case": "edge",
+      "steps": [
+        "Inspect the sidebar"
+      ],
+      "expected": "No approval, policy, audit or register screens",
+      "requirement": "Section 5.4 \u00b7 refusals at the route",
+      "tags": [],
+      "status": "passed",
+      "observation": "Student navigation carries no administrative screens.",
+      "screenshots": [
+        "B22_student_nav.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:53:46",
+      "duration_s": 7.6
+    },
+    {
+      "id": "B23",
+      "title": "Dashboard arithmetic from live data",
+      "role": "admin",
+      "case": "base",
+      "steps": [
+        "Sign in as the administrator"
+      ],
+      "expected": "Utilisation, clash risk and examination placement",
+      "requirement": "Section 9 \u00b7 comparative figures",
+      "tags": [],
+      "status": "passed",
+      "observation": "The dashboard reports utilisation, clash risk and examination placement from live data.",
+      "screenshots": [
+        "B23_admin_dashboard.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:53:54",
+      "duration_s": 14.5
+    },
+    {
+      "id": "B24",
+      "title": "Gated request approved end to end",
+      "role": "admin",
+      "case": "normal",
+      "steps": [
+        "Faculty requests the seminar hall",
+        "Administrator approves"
+      ],
+      "expected": "PENDING then CONFIRMED",
+      "requirement": "Table 5 \u00b7 approval gates",
+      "tags": [],
+      "status": "passed",
+      "observation": "The seminar hall was requested through the faculty form, held as PENDING_APPROVAL, then approved and confirmed by the administrator.",
+      "screenshots": [
+        "B24_approved.png",
+        "B24_gated_request.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:54:08",
+      "duration_s": 44.8
+    },
+    {
+      "id": "B25",
+      "title": "Rejection demands a reason",
+      "role": "admin",
+      "case": "edge",
+      "steps": [
+        "Faculty requests the seminar hall",
+        "Administrator rejects with no reason"
+      ],
+      "expected": "REASON_REQUIRED, nothing changes",
+      "requirement": "Section 4.4 \u00b7 reasons are mandatory",
+      "tags": [],
+      "status": "passed",
+      "observation": "A rejection with no reason was refused by the service layer.",
+      "screenshots": [
+        "B25_reject_without_reason.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:54:53",
+      "duration_s": 42.2
+    },
+    {
+      "id": "B26",
+      "title": "Room register as the reference of record",
+      "role": "admin",
+      "case": "base",
+      "steps": [
+        "Open Room register"
+      ],
+      "expected": "All rooms with bookable and unconfirmed flags",
+      "requirement": "Section 6.4 \u00b7 reference data is a file",
+      "tags": [],
+      "status": "passed",
+      "observation": "The register lists all 34 recorded rooms with bookable and unconfirmed flags.",
+      "screenshots": [
+        "B26_room_register.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:55:35",
+      "duration_s": 9.7
+    },
+    {
+      "id": "B27",
+      "title": "Confirm an inferred room fact",
+      "role": "admin",
+      "case": "normal",
+      "steps": [
+        "Open Room register",
+        "Confirm the first inferred fact"
+      ],
+      "expected": "Flag cleared, change audited",
+      "requirement": "Section 6.5 \u00b7 five facts inferred",
+      "tags": [],
+      "status": "passed",
+      "observation": "An inferred room fact was confirmed in one click and the flag cleared.",
+      "screenshots": [
+        "B27_confirm_room.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:55:45",
+      "duration_s": 11.9
+    },
+    {
+      "id": "B28",
+      "title": "Correct a room capacity",
+      "role": "admin",
+      "case": "normal",
+      "steps": [
+        "Open Room register",
+        "Change capacity",
+        "Save and audit"
+      ],
+      "expected": "Saved with an audit row",
+      "requirement": "Table 5 \u00b7 correct room data",
+      "tags": [],
+      "status": "passed",
+      "observation": "A capacity correction was saved; the change writes an audit row with before and after.",
+      "screenshots": [
+        "B28_edit_room.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:55:57",
+      "duration_s": 14.5
+    },
+    {
+      "id": "B29",
+      "title": "Closure against existing reservations",
+      "role": "admin",
+      "case": "edge",
+      "steps": [
+        "Open Closures",
+        "Close IET20 across two periods"
+      ],
+      "expected": "Refused, or accepted after showing the affected list",
+      "requirement": "Section 10 \u00b7 closure with reservations inside",
+      "tags": [],
+      "status": "passed",
+      "observation": "The closure was either refused because reservations sit inside it, or accepted because none do; either way the affected list is shown first.",
+      "screenshots": [
+        "B29_closure.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:56:11",
+      "duration_s": 22.5
+    },
+    {
+      "id": "B30",
+      "title": "Resolve a report and notify reporters",
+      "role": "admin",
+      "case": "normal",
+      "steps": [
+        "Open Reports",
+        "Resolve with a note"
+      ],
+      "expected": "Resolved and reporters notified",
+      "requirement": "Section 5.2 \u00b7 a channel that answers",
+      "tags": [],
+      "status": "passed",
+      "observation": "The open report was resolved and the reporters were notified.",
+      "screenshots": [
+        "B30_resolve_report.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:56:34",
+      "duration_s": 13.7
+    },
+    {
+      "id": "B31",
+      "title": "Policy change writes history",
+      "role": "admin",
+      "case": "normal",
+      "steps": [
+        "Open Policy settings",
+        "Change the spacing factor",
+        "Save"
+      ],
+      "expected": "History row recorded",
+      "requirement": "Section 12.3 \u00b7 six settings with history",
+      "tags": [],
+      "status": "passed",
+      "observation": "A policy value was changed and the change history recorded the previous value.",
+      "screenshots": [
+        "B31_settings.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:56:48",
+      "duration_s": 14.7
+    },
+    {
+      "id": "B32",
+      "title": "Audit trail and room replay",
+      "role": "admin",
+      "case": "normal",
+      "steps": [
+        "Open Audit trail",
+        "Replay IET20 at a period"
+      ],
+      "expected": "State reconstructed from events",
+      "requirement": "Table 25 \u00b7 replaying the audit log",
+      "tags": [],
+      "status": "passed",
+      "observation": "The audit screen listed events and replayed a room's state at a chosen instant.",
+      "screenshots": [
+        "B32_audit_replay.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:57:02",
+      "duration_s": 16.1
+    },
+    {
+      "id": "B33",
+      "title": "Twenty concurrent requests, one winner",
+      "role": "admin",
+      "case": "edge",
+      "steps": [
+        "Open Concurrency drill",
+        "Run"
+      ],
+      "expected": "One created, the rest refused with alternatives",
+      "requirement": "Section 11.2 \u00b7 the concurrency claim demonstrated",
+      "tags": [],
+      "status": "passed",
+      "observation": "Twenty threads requested one room and one window: one reservation was created and the rest were refused, each carrying alternatives.",
+      "screenshots": [
+        "B33_concurrency_drill.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:57:19",
+      "duration_s": 17.4
+    },
+    {
+      "id": "B34",
+      "title": "Campus-wide announcement",
+      "role": "admin",
+      "case": "base",
+      "steps": [
+        "Open Announcements",
+        "Publish campus-wide"
+      ],
+      "expected": "Outbox rows written",
+      "requirement": "Table 5 \u00b7 campus notice is administrative",
+      "tags": [],
+      "status": "passed",
+      "observation": "A campus-wide notice was published with its outbox row count reported.",
+      "screenshots": [
+        "B34_campus_notice.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:57:36",
+      "duration_s": 15.2
+    },
+    {
+      "id": "B35",
+      "title": "Grounded assistant on availability",
+      "role": "admin",
+      "case": "base",
+      "steps": [
+        "Open Ask the assistant",
+        "Ask about free rooms"
+      ],
+      "expected": "Answer, intent and guardrail status",
+      "requirement": "Figure 14 \u00b7 grounded search",
+      "tags": [],
+      "status": "passed",
+      "observation": "The assistant parsed the question, ran a real query and reported its guardrail status.",
+      "screenshots": [
+        "B35_assistant.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:57:51",
+      "duration_s": 14.7
+    },
+    {
+      "id": "B36",
+      "title": "Assistant answers a section question",
+      "role": "admin",
+      "case": "normal",
+      "steps": [
+        "Ask when CSE-3A's next class is"
+      ],
+      "expected": "Next class with room and time",
+      "requirement": "Section 7.4 \u00b7 tool call, read only",
+      "tags": [],
+      "status": "passed",
+      "observation": "A section-schedule question was answered from the schedule tables.",
+      "screenshots": [
+        "B36_assistant_section.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:58:06",
+      "duration_s": 14.8
+    },
+    {
+      "id": "B37",
+      "title": "Reset demonstration data",
+      "role": "admin",
+      "case": "edge",
+      "steps": [
+        "Click Reset demonstration data"
+      ],
+      "expected": "The register returns to its seeded state",
+      "requirement": "Definition of done \u00b7 a reviewer can reset the demo",
+      "tags": [],
+      "status": "passed",
+      "observation": "The demonstration data reset returned the register to its seeded state.",
+      "screenshots": [
+        "B37_reset.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:58:21",
+      "duration_s": 12.2
+    },
+    {
+      "id": "B38",
+      "title": "Sign out drops the session",
+      "role": "admin",
+      "case": "base",
+      "steps": [
+        "Sign out"
+      ],
+      "expected": "Back to the sign-in screen",
+      "requirement": "Policy layer \u00b7 no session, no shell",
+      "tags": [],
+      "status": "passed",
+      "observation": "Signing out returned to the sign-in screen and dropped the shell.",
+      "screenshots": [
+        "B38_sign_out.png"
+      ],
+      "console_errors": [],
+      "error": "",
+      "started_at": "2026-11-06T10:58:33",
+      "duration_s": 9.2
+    }
+  ],
+  "passed": 38,
+  "failed": 0
+}

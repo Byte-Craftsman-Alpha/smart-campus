@@ -1,0 +1,156 @@
+[
+  {
+    "id": "F01",
+    "title": "Sign-in screen crashed on load",
+    "found_by": "B02 (first browser run)",
+    "severity": "Critical",
+    "symptom": "Every role except the bare sign-in page failed. The page rendered the banner and then stopped, with no form at all.",
+    "root_cause": "The role selector was given an on_change callback while inside an st.form. Streamlit forbids callbacks on widgets inside a form (StreamlitInvalidFormCallbackError), so the whole page aborted.",
+    "fix": "Moved the role selector outside the form and keyed the login and password fields by role, which achieves the same behaviour without a callback: switching role offers that role's demonstration account.",
+    "files": "app.py",
+    "verification": "B02, B03, B04, B05, B06 all pass; the sign-in form renders for every role."
+  },
+  {
+    "id": "F02",
+    "title": "Timetable slots did not block a new reservation",
+    "found_by": "TC-61, TC-73 (domain suite)",
+    "severity": "High",
+    "symptom": "A room shown as free by the search could still carry a timetabled class, and the insert then failed with a generic database refusal.",
+    "root_cause": "Availability united all three occupancy sources, but the create path only checked live reservations. The exclusion trigger correctly refused, but the caller was told nothing useful and got no alternatives.",
+    "fix": "The create path now checks the timetable explicitly and returns TIMETABLE_OCCUPIED with three ranked alternatives, matching how it already handled reservations.",
+    "files": "core/booking.py",
+    "verification": "TC-61 and TC-73 pass; booking a timetabled room now yields TIMETABLE_OCCUPIED with alternatives."
+  },
+  {
+    "id": "F03",
+    "title": "Internal database errors surfaced as the wrong code",
+    "found_by": "TC-116, TC-61 (domain suite)",
+    "severity": "Medium",
+    "symptom": "A failed foreign key was reported as a generic DATABASE constraint, and a mistyped section code reached the engine instead of being caught.",
+    "root_cause": "The create path did not validate the section reference, and the IntegrityError mapper only knew the three exclusion constraint names.",
+    "fix": "Section codes are validated up front (INVALID_SECTION), and a foreign key failure is mapped to REFERENCE_MISSING with a readable message.",
+    "files": "core/booking.py",
+    "verification": "TC-116 passes; a nonexistent section is refused with INVALID_SECTION before any insert."
+  },
+  {
+    "id": "F04",
+    "title": "Audit replay declared a booked room free",
+    "found_by": "TC-117 (domain suite)",
+    "severity": "High",
+    "symptom": "Replaying a room's state at the start of a reservation reported no occupation.",
+    "root_cause": "The replay asked whether the instant overlapped the interval. An instant is not an interval: with a half-open comparison a zero-length probe can never overlap, which defeated the check.",
+    "fix": "The replay now tests containment, start <= at < end, which is the question being asked.",
+    "files": "core/audit.py",
+    "verification": "TC-117 passes; a reservation created at the replay instant is reported as occupying the room, and after cancellation it is not."
+  },
+  {
+    "id": "F05",
+    "title": "Assistant guardrail could not be tested, and matched the word \u201cto\u201d",
+    "found_by": "TC-126 (domain suite)",
+    "severity": "Medium",
+    "symptom": "The hallucinated-room guardrail was inline in the ask() function, so it could not be exercised directly; and room codes were matched case-insensitively, so the office code TO matched the English word.",
+    "root_cause": "No seam for the check, and one flag doing two jobs: parsing a question (ignore case) versus validating an answer (exact code).",
+    "fix": "Extracted apply_guardrail() as a pure function and matched answer codes case-sensitively against bookable rooms only.",
+    "files": "core/assistant.py",
+    "verification": "TC-126 and TC-126b pass: a drafted answer naming a room outside the result set is replaced by the plain list; a clean answer passes through untouched. TC-129 asserts the module contains no write path."
+  },
+  {
+    "id": "F06",
+    "title": "Reserve heading shown with nothing to reserve",
+    "found_by": "B10 (browser run)",
+    "severity": "Low",
+    "symptom": "When no single room could seat a request, the page still printed the heading \u201cReserve one of these\u201d above an empty list.",
+    "root_cause": "The heading was emitted before the empty-options branch.",
+    "fix": "The heading is now emitted only when there is something to reserve, and the empty case points at the split panel instead.",
+    "files": "ui/page_common.py",
+    "verification": "B10 and B11 pass with the split panel and no orphan heading."
+  },
+  {
+    "id": "F07",
+    "title": "A reschedule of a pending reservation read as a new approval request",
+    "found_by": "B14 (browser run)",
+    "severity": "Medium",
+    "symptom": "Moving a reservation that was waiting for approval produced the message \u201cRequest recorded for approval\u201d, which describes a new request rather than a move.",
+    "root_cause": "One renderer decided the wording from the resulting status alone, so every action on a pending row looked like a creation.",
+    "fix": "render_result() now takes the action (created, moved, cancelled, released, approved, rejected, displaced) and chooses the wording from the action and the status together.",
+    "files": "ui/page_common.py, ui/page_faculty.py",
+    "verification": "B14 passes and reports \u201cMoved, still waiting for approval\u201d."
+  },
+  {
+    "id": "F08",
+    "title": "Audit screen crashed on rows with non-JSON state",
+    "found_by": "B32 (browser run)",
+    "severity": "High",
+    "symptom": "Opening the Before-and-after panel raised a traceback and the screen replaced itself with an error.",
+    "root_cause": "audit.diff() assumed both state columns were JSON objects; older and hand-written rows hold plain strings, and json.loads raised.",
+    "fix": "States are coerced before diffing: a non-JSON value becomes a single named field, so the view degrades instead of failing.",
+    "files": "core/audit.py",
+    "verification": "TC-141 passes and B32 passes; the panel renders for mixed row shapes."
+  },
+  {
+    "id": "F09",
+    "title": "Completed reservations disappeared from the record the student can see",
+    "found_by": "B19, B18 (browser run)",
+    "severity": "Medium",
+    "symptom": "Once a booking was automatically closed as COMPLETED, the student's schedule and the report picker no longer listed it, so a class that had already happened could not be reported as wrong.",
+    "root_cause": "The section-schedule query listed four statuses and omitted COMPLETED.",
+    "fix": "COMPLETED is included; the record of a finished class stays visible and reportable.",
+    "files": "core/availability.py",
+    "verification": "B18, B19 and B20 pass; the report picker lists completed reservations."
+  },
+  {
+    "id": "F10",
+    "title": "Timetabled classes were not counted as the student's next class",
+    "found_by": "B18 (browser run)",
+    "severity": "Medium",
+    "symptom": "The student screen reported no upcoming class even though the timetable had one, because only reservations counted as live.",
+    "root_cause": "The live filter in the student view excluded the TIMETABLE pseudo-status.",
+    "fix": "TIMETABLE is treated as a live entry for the student's own schedule.",
+    "files": "ui/page_student.py",
+    "verification": "B18 passes and the next-class callout names the timetabled class, room and time."
+  },
+  {
+    "id": "F11",
+    "title": "Closure results were rendered as a failed booking",
+    "found_by": "B29 (browser run)",
+    "severity": "Medium",
+    "symptom": "A saved closure produced a success message followed by an empty failure block, because the shared renderer expected a booking payload.",
+    "root_cause": "render_result() assumed every successful payload carried a booking.",
+    "fix": "The renderer recognises a closure payload and a report payload and reports each in its own terms.",
+    "files": "ui/page_common.py",
+    "verification": "B29 passes and reports the closure with the count of reservations that were inside it."
+  },
+  {
+    "id": "F12",
+    "title": "Confirming an inferred room fact silently did nothing",
+    "found_by": "TC-102 (domain suite)",
+    "severity": "High",
+    "symptom": "The confirm action returned success but the unconfirmed flag stayed set.",
+    "root_cause": "unconfirmed was missing from the list of editable fields, so the update was filtered out before it reached the statement.",
+    "fix": "unconfirmed added to EDITABLE_ROOM_FIELDS.",
+    "files": "core/records.py",
+    "verification": "TC-102 and B27 pass; the flag clears and the change is audited."
+  },
+  {
+    "id": "F13",
+    "title": "Deprecated table width argument",
+    "found_by": "Application log during the browser run",
+    "severity": "Low",
+    "symptom": "Every table raised a deprecation warning and would break after the removal date.",
+    "root_cause": "use_container_width=True on 21 calls.",
+    "fix": "Replaced with width=\"stretch\" throughout the interface layer.",
+    "files": "ui/*.py",
+    "verification": "The warning is absent from the application log; the tables still stretch."
+  },
+  {
+    "id": "F14",
+    "title": "Demonstration accounts were all reachable from one password",
+    "found_by": "Test design review (noting a deliberate prototype limitation)",
+    "severity": "Info",
+    "symptom": "Authentication is a fixed password per role, chosen so a reviewer can try all three.",
+    "root_cause": "This is a prototype: the accounts are printed on the sign-in page on purpose, as the definition of done asks.",
+    "fix": "Not a defect. Recorded so it is not mistaken for one. The policy layer, not the login, is what enforces role restrictions, and TC-16 to TC-33 assert every negative cell.",
+    "files": "app.py",
+    "verification": "Section 5.4 of the design says the refusal at the route is the security; the matrix tests assert it."
+  }
+]
